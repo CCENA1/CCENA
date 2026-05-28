@@ -1,4 +1,4 @@
-// ─────────────────────────────────────────────────────────────────
+    // ─────────────────────────────────────────────────────────────────
 //  CCENA — Netlify serverless proxy for Anthropic Claude API
 //  Keeps ANTHROPIC_API_KEY server-side; avoids browser CORS issues.
 //
@@ -67,8 +67,8 @@ exports.handler = async (event) => {
 
   // ── Build Anthropic payload ───────────────────────────────────
   const payload = JSON.stringify({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 4096,
+    model: 'claude-haiku-4-5',
+    max_tokens: 2048,
     ...(system ? { system } : {}),
     messages,
   });
@@ -140,3 +140,4 @@ exports.handler = async (event) => {
     req.end();
   });
 };
+  
