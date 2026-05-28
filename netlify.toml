@@ -1,13 +1,20 @@
+
 # ─────────────────────────────────────────────────────────────────
 #  CCENA — Netlify configuration
 # ─────────────────────────────────────────────────────────────────
 
 [build]
-  publish = "."           # index.html is at the repo root
+  publish = "."
   functions = "netlify/functions"
 
 [build.environment]
-  NODE_VERSION = "18"     # Required for native fetch / https in functions
+  NODE_VERSION = "18"
+
+[functions]
+  node_bundler = "zisi"
+
+[functions."ask-claude"]
+  timeout = 26
 
 # ── Security headers ──────────────────────────────────────────────
 [[headers]]
