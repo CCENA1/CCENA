@@ -1,0 +1,8 @@
+{
+  "name": "ccena-app",
+  "version": "1.0.0",
+  "description": "CCENA — Construction Chemicals Expert Neutral Advice",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.0"
+  }
+}
