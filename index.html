@@ -994,7 +994,7 @@ async function callAI(targetId,customPrompt){
     '\n\nProvide: 1) Recommended system type and chemistry (no brand names) 2) Application requirements and critical success factors 3) QC and acceptance criteria 4) Critical cautions and failure modes 5) Standards compliance notes 6) Key questions to ask any supplier'
   );
   try{
-    const res=await fetch('/.netlify/functions/ask',{
+    const res=await fetch('https://ccena.jaberkhaled94.workers.dev/',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:2048,system:SYS,messages:[{role:'user',content:prompt}]})
@@ -1124,4 +1124,3 @@ function showToast(msg,err){
 </script>
 </body>
 </html>
-
