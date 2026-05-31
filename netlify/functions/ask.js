@@ -13,20 +13,30 @@ exports.handler = async function(event) {
         'x-api-key': process.env.ANTHROPIC_API_KEY,
         'anthropic-version': '2023-06-01'
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify({
+        model: body.model || 'claude-sonnet-4-5',
+        max_tokens: body.max_tokens || 2048,
+        system: body.system,
+        messages: body.messages
+      })
     });
 
-    const data = await response.json();
+    const text = await response.text();
 
     return {
       statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: text
     };
   } catch (err) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: err.message })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: { message: err.message } })
     };
   }
 };
+
