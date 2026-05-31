@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>CCENA — Construction Chemicals Expert Neutral Advice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════ */
+:root {
+  --bg:      #0a0e1a;
+  --bg2:     #0f1626;
+  --bg3:     #141d33;
+  --panel:   #17213a;
+  --panel2:  #1d2a47;
+  --border:  rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+
+  /* Brand palette — vivid, high-contrast */
+  --c1:  #ff6b35;   /* coral-orange — primary CTA */
+  --c2:  #ffd166;   /* amber-gold */
+  --c3:  #06d6a0;   /* emerald */
+  --c4:  #118ab2;   /* cerulean */
+  --c5:  #e040fb;   /* violet accent */
+
+  --c1f: rgba(255,107,53,.13);
+  --c2f: rgba(255,209,102,.10);
+  --c3f: rgba(6,214,160,.10);
+  --c4f: rgba(17,138,178,.10);
+
+  --text:   #eeeaf4;
+  --text2:  #c0bcd0;
+  --muted:  #6e7a99;
+  --muted2: #313d5f;
+
+  --r:  10px;
+  --rx: 18px;
+  --t:  .22s cubic-bezier(.4,0,.2,1);
+}
+
+/* ═══════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════ */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+a { color: var(--c1); text-decoration: none; }
+
+/* ═══════════════════════════════════════
+   ANIMATED MESH BACKGROUND
+═══════════════════════════════════════ */
+.mesh {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  overflow: hidden;
+}
+.mesh-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: orb-drift 18s ease-in-out infinite alternate;
+}
+.mesh-orb:nth-child(1) {
+  width: 600px; height: 600px; top: -200px; right: -100px;
+  background: radial-gradient(circle, rgba(255,107,53,.12) 0%, transparent 70%);
+  animation-duration: 20s;
+}
+.mesh-orb:nth-child(2) {
+  width: 500px; height: 500px; bottom: -150px; left: -100px;
+  background: radial-gradient(circle, rgba(6,214,160,.08) 0%, transparent 70%);
+  animation-duration: 25s; animation-delay: -8s;
+}
+.mesh-orb:nth-child(3) {
+  width: 400px; height: 400px; top: 40%; left: 30%;
+  background: radial-gradient(circle, rgba(17,138,178,.07) 0%, transparent 70%);
+  animation-duration: 22s; animation-delay: -12s;
+}
+@keyframes orb-drift {
+  from { transform: translate(0,0) scale(1); }
+  to   { transform: translate(40px, 30px) scale(1.08); }
+}
+
+/* ═══════════════════════════════════════
+   HEADER
+═══════════════════════════════════════ */
+#hdr {
+  position: sticky; top: 0; z-index: 400;
+  height: 68px;
+  background: rgba(10,14,26,.85);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px;
+}
+
+/* Smart logo */
+.hlogo { display: flex; align-items: center; gap: 14px; cursor: pointer; }
+.logo-icon {
+  width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--c1) 0%, var(--c2) 60%, var(--c3) 100%);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  box-shadow: 0 4px 18px rgba(255,107,53,.35);
+}
+.logo-icon::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,.15) 100%);
+}
+.logo-icon svg {
+  width: 24px; height: 24px; position: relative; z-index: 1;
+}
+.logo-text { display: flex; flex-direction: column; gap: 1px; }
+.logo-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px; font-weight: 800; letter-spacing: -0.5px;
+  background: linear-gradient(90deg, var(--text) 0%, var(--c2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.logo-sub {
+  font-size: 9.5px; font-weight: 500; text-transform: uppercase;
+  letter-spacing: 2.5px; color: var(--muted);
+}
+
+.hbadge {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 11.5px; font-weight: 600; color: var(--c3);
+  background: var(--c3f); border: 1px solid rgba(6,214,160,.22);
+  border-radius: 100px; padding: 6px 16px;
+}
+.hbadge-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--c3);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
+
+/* ═══════════════════════════════════════
+   PROGRESS BAR
+═══════════════════════════════════════ */
+#progwrap { position:sticky; top:68px; z-index:399; height:3px; background:var(--border); }
+#progbar {
+  height:100%;
+  background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3));
+  background-size: 200% 100%;
+  transition: width .6s cubic-bezier(.4,0,.2,1);
+  animation: shimmer 3s linear infinite;
+}
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* ═══════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════ */
+#app { position:relative; z-index:1; }
+#wrap { max-width: 880px; margin: 0 auto; padding: 48px 24px 100px; }
+
+/* ═══════════════════════════════════════
+   STEP TRAIL
+═══════════════════════════════════════ */
+#trail { display:none; align-items:center; gap:5px; flex-wrap:wrap; margin-bottom:32px; }
+.tdot { width:8px; height:8px; border-radius:50%; background:var(--muted2); transition:var(--t); }
+.tdot.done { background:var(--c3); }
+.tdot.now  { background:var(--c1); width:26px; border-radius:4px; }
+.tlabel { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:2.5px; color:var(--muted); margin-left:8px; }
+
+/* ═══════════════════════════════════════
+   SCREENS
+═══════════════════════════════════════ */
+.scr { display:none; }
+.scr.on { display:block; animation:fadeUp .38s cubic-bezier(.4,0,.2,1) both; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+
+/* ═══════════════════════════════════════
+   TYPOGRAPHY
+═══════════════════════════════════════ */
+.eyebrow {
+  font-size:10.5px; font-weight:700; text-transform:uppercase;
+  letter-spacing:3px; color:var(--c1); margin-bottom:12px;
+  display:flex; align-items:center; gap:8px;
+}
+.eyebrow::before {
+  content:''; width:20px; height:2px;
+  background:linear-gradient(90deg,var(--c1),var(--c2));
+  border-radius:2px;
+}
+.qtitle {
+  font-family:'Syne', sans-serif;
+  font-size:clamp(26px,4vw,42px);
+  font-weight:800; line-height:1.1; color:var(--text);
+  margin-bottom:10px; letter-spacing:-0.5px;
+}
+.qsub { font-size:14px; color:var(--muted); font-weight:300; max-width:580px; margin-bottom:28px; line-height:1.65; }
+.mhint {
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:11.5px; color:var(--c3); font-weight:500;
+  background:var(--c3f); border:1px solid rgba(6,214,160,.2);
+  border-radius:100px; padding:4px 13px; margin-bottom:12px;
+}
+
+/* ═══════════════════════════════════════
+   OPTION CARDS
+═══════════════════════════════════════ */
+.ogrid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+  gap:9px; margin-bottom:20px;
+}
+.ogrid.c2 { grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); }
+.ogrid.c3 { grid-template-columns:repeat(auto-fill,minmax(155px,1fr)); }
+
+.ocard {
+  position:relative; cursor:pointer;
+  border-radius:var(--r);
+  border:1.5px solid var(--border);
+  background:var(--panel);
+  padding:16px 16px 14px;
+  transition:var(--t); user-select:none; overflow:hidden;
+}
+.ocard::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg, var(--c1f), transparent 65%);
+  opacity:0; transition:var(--t);
+}
+.ocard:hover { border-color:rgba(255,107,53,.4); transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.35); }
+.ocard.sel { border-color:var(--c1); background:rgba(255,107,53,.08); }
+.ocard.sel::after { opacity:1; }
+
+.ochk {
+  position:absolute; top:10px; right:10px;
+  width:20px; height:20px; border-radius:50%;
+  border:1.5px solid var(--muted2);
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:700; transition:var(--t);
+}
+.ocard.sel .ochk {
+  background:var(--c1); border-color:var(--c1); color:#fff;
+}
+.ocard.sel .ochk::after { content:'✓'; }
+.oico { font-size:26px; margin-bottom:8px; display:block; position:relative; z-index:1; }
+.olbl { font-size:13px; font-weight:600; color:var(--text); line-height:1.3; position:relative; z-index:1; }
+.odsc { font-size:11px; color:var(--muted); margin-top:3px; font-weight:300; position:relative; z-index:1; }
+
+/* ═══════════════════════════════════════
+   SMART CONTEXT HINT (appears below scope select)
+═══════════════════════════════════════ */
+#context-hint {
+  display:none; margin-top:12px; padding:14px 16px;
+  background:var(--c4f); border:1px solid rgba(17,138,178,.25);
+  border-radius:var(--r); font-size:13px; color:var(--text2);
+  line-height:1.55; animation:fadeUp .3s ease both;
+}
+#context-hint strong { color:var(--c2); }
+
+/* ═══════════════════════════════════════
+   INPUTS
+═══════════════════════════════════════ */
+input[type=text], input[type=email], textarea, select {
+  width:100%; background:var(--panel);
+  border:1.5px solid var(--border);
+  border-radius:var(--r); color:var(--text);
+  font-family:'Outfit', sans-serif; font-size:14px;
+  padding:12px 16px; outline:none; transition:var(--t);
+  resize:vertical;
+}
+input[type=text]:focus, input[type=email]:focus, textarea:focus, select:focus {
+  border-color:var(--c1); background:rgba(255,107,53,.04);
+  box-shadow:0 0 0 3px rgba(255,107,53,.08);
+}
+textarea { min-height:84px; }
+select { appearance:none; cursor:pointer; }
+.irow { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+.ifield { margin-bottom:12px; }
+.fl { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); margin-bottom:7px; }
+
+/* ═══════════════════════════════════════
+   OTHER EXPAND
+═══════════════════════════════════════ */
+.oexp { display:none; margin-top:10px; animation:fadeUp .25s ease both; }
+.oexp.vis { display:block; }
+
+/* ═══════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════ */
+.nav { display:flex; align-items:center; justify-content:space-between; margin-top:34px; gap:10px; }
+.btn {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:12px 28px; border-radius:100px;
+  font-family:'Outfit', sans-serif; font-size:13.5px; font-weight:600;
+  cursor:pointer; border:none; transition:var(--t); letter-spacing:.2px;
+  white-space:nowrap;
+}
+.btn-g {
+  background:linear-gradient(135deg, var(--c1) 0%, #ff9a5c 100%);
+  color:#fff;
+  box-shadow:0 4px 16px rgba(255,107,53,.3);
+}
+.btn-g:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(255,107,53,.45); }
+.btn-g:active { transform:translateY(0); }
+.btn-s { background:transparent; color:var(--muted); border:1.5px solid var(--border); }
+.btn-s:hover { border-color:var(--muted); color:var(--text); }
+.btn-t { background:transparent; color:var(--c3); border:1.5px solid rgba(6,214,160,.3); }
+.btn-t:hover { background:var(--c3f); }
+.btn-r { background:transparent; color:#e05454; border:1.5px solid rgba(224,84,84,.3); }
+.btn:disabled { opacity:.35; pointer-events:none; }
+.btn-full { width:100%; justify-content:center; border-radius:var(--r); padding:14px; font-size:14.5px; }
+
+/* ═══════════════════════════════════════
+   FILE UPLOAD
+═══════════════════════════════════════ */
+.upzone {
+  position:relative; border:2px dashed var(--border);
+  border-radius:var(--r); padding:32px 24px;
+  text-align:center; cursor:pointer; transition:var(--t);
+  background:var(--panel); margin-bottom:10px;
+}
+.upzone:hover, .upzone.dov { border-color:var(--c1); background:var(--c1f); }
+.upzone input[type=file] { position:absolute; inset:0; opacity:0; width:100%; height:100%; cursor:pointer; }
+.upzone .ui { font-size:32px; margin-bottom:8px; }
+.upzone .ut { font-size:13px; color:var(--muted); }
+.upzone .ut strong { color:var(--c1); }
+.flist { display:flex; flex-direction:column; gap:7px; }
+.fi { display:flex; align-items:center; justify-content:space-between; background:var(--panel2); border-radius:8px; padding:8px 13px; font-size:13px; }
+.fi-n { color:var(--text2); }
+.fi-r { cursor:pointer; color:#e05454; font-size:14px; padding:2px; }
+
+/* ═══════════════════════════════════════
+   DIVIDER
+═══════════════════════════════════════ */
+.div { height:1px; background:var(--border); margin:18px 0; }
+
+/* ═══════════════════════════════════════
+   NEUTRAL NOTE
+═══════════════════════════════════════ */
+.nnote {
+  display:flex; align-items:flex-start; gap:11px;
+  background:var(--c3f); border:1px solid rgba(6,214,160,.2);
+  border-radius:var(--r); padding:13px 16px;
+  font-size:13px; color:var(--c3); line-height:1.55;
+  margin-bottom:24px;
+}
+.nnote .ni { font-size:17px; flex-shrink:0; margin-top:1px; }
+
+/* ═══════════════════════════════════════
+   WELCOME SCREEN
+═══════════════════════════════════════ */
+#scr-welcome { text-align:center; padding:24px 0 48px; }
+
+/* animated logo hero */
+.hero-logo {
+  margin: 0 auto 40px;
+  width: 110px; height: 110px;
+  position: relative;
+}
+.hero-logo-ring {
+  position:absolute; inset:0; border-radius:50%;
+  border: 2.5px solid transparent;
+  background: linear-gradient(#0a0e1a,#0a0e1a) padding-box,
+              linear-gradient(135deg,var(--c1),var(--c2),var(--c3),var(--c4)) border-box;
+  animation: spin 8s linear infinite;
+}
+@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+.hero-logo-inner {
+  position:absolute; inset:10px;
+  border-radius:50%;
+  background: linear-gradient(135deg, var(--c1) 0%, var(--c2) 45%, var(--c3) 100%);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow: 0 8px 32px rgba(255,107,53,.4), inset 0 0 20px rgba(255,255,255,.1);
+}
+.hero-logo-inner svg { width:48px; height:48px; }
+
+.wbadge {
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--c2f); border:1px solid rgba(255,209,102,.28);
+  border-radius:100px; padding:6px 18px;
+  font-size:11px; font-weight:700; text-transform:uppercase;
+  letter-spacing:2px; color:var(--c2); margin-bottom:24px;
+}
+
+.wtitle {
+  font-family:'Syne', sans-serif;
+  font-size:clamp(46px,9vw,86px);
+  font-weight:800; line-height:.92; letter-spacing:-2px;
+  margin-bottom:24px; color:var(--text);
+}
+.wtitle .hi {
+  background: linear-gradient(135deg, var(--c1) 0%, var(--c2) 50%, var(--c3) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.wsub {
+  font-size:15.5px; color:var(--muted); max-width:540px;
+  margin:0 auto 44px; font-weight:300; line-height:1.75;
+}
+
+.wpillars {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:12px; margin-bottom:44px; text-align:left;
+}
+.wp {
+  background:var(--panel); border:1.5px solid var(--border);
+  border-radius:var(--rx); padding:22px 20px;
+  transition:var(--t); position:relative; overflow:hidden;
+}
+.wp::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg, var(--c1), var(--c2));
+  transform:scaleX(0); transform-origin:left; transition:var(--t);
+}
+.wp:hover { border-color:rgba(255,107,53,.3); transform:translateY(-3px); }
+.wp:hover::before { transform:scaleX(1); }
+.wp:nth-child(2)::before { background:linear-gradient(90deg, var(--c2), var(--c3)); }
+.wp:nth-child(3)::before { background:linear-gradient(90deg, var(--c3), var(--c4)); }
+.wp-ico { font-size:28px; margin-bottom:11px; }
+.wp-t { font-family:'Syne',sans-serif; font-size:13.5px; font-weight:700; color:var(--text); margin-bottom:5px; }
+.wp-d { font-size:12px; color:var(--muted); font-weight:300; line-height:1.55; }
+
+.wstart {
+  padding:15px 56px; font-size:15px; border-radius:100px;
+  background:linear-gradient(135deg, var(--c1), #ff9a5c);
+  box-shadow:0 6px 28px rgba(255,107,53,.4);
+}
+.wstart:hover { box-shadow:0 10px 40px rgba(255,107,53,.6); }
+
+.wscopes {
+  display:flex; flex-wrap:wrap; justify-content:center;
+  gap:7px; margin-top:40px;
+}
+.wpill {
+  font-size:12px; color:var(--muted);
+  background:var(--panel); border:1px solid var(--border);
+  border-radius:100px; padding:5px 14px;
+  transition:var(--t);
+}
+.wpill:hover { color:var(--text); border-color:rgba(255,107,53,.3); }
+
+/* ═══════════════════════════════════════
+   STEP 6 — preference multi-select (new card style)
+═══════════════════════════════════════ */
+.pref-card {
+  position:relative; cursor:pointer;
+  border-radius:var(--rx);
+  border:2px solid var(--border);
+  background:var(--panel);
+  padding:20px 20px 18px;
+  transition:var(--t); user-select:none; overflow:hidden;
+  display:flex; align-items:flex-start; gap:16px;
+}
+.pref-card:hover { border-color:rgba(255,107,53,.4); transform:translateY(-2px); }
+.pref-card.sel { border-color:var(--c1); background:rgba(255,107,53,.07); }
+.pref-card-ico {
+  font-size:28px; flex-shrink:0; margin-top:2px;
+  width:44px; height:44px; border-radius:10px;
+  background:var(--panel2); display:flex; align-items:center; justify-content:center;
+  transition:var(--t);
+}
+.pref-card.sel .pref-card-ico { background:rgba(255,107,53,.15); }
+.pref-card-body { flex:1; min-width:0; }
+.pref-card-title { font-family:'Syne',sans-serif; font-size:14px; font-weight:700; color:var(--text); margin-bottom:4px; }
+.pref-card-desc { font-size:12px; color:var(--muted); font-weight:300; line-height:1.5; }
+.pref-chk {
+  position:absolute; top:14px; right:14px;
+  width:22px; height:22px; border-radius:50%;
+  border:2px solid var(--muted2);
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700; transition:var(--t);
+}
+.pref-card.sel .pref-chk { background:var(--c1); border-color:var(--c1); color:#fff; }
+.pref-card.sel .pref-chk::after { content:'✓'; }
+
+/* ═══════════════════════════════════════
+   LOADING SCREEN
+═══════════════════════════════════════ */
+#scr-loading { text-align:center; padding:80px 0; }
+.ldots { display:flex; justify-content:center; gap:10px; margin-bottom:28px; }
+.ldot { width:12px; height:12px; border-radius:50%; animation:ldance 1.6s infinite; }
+.ldot:nth-child(1) { background:var(--c1); }
+.ldot:nth-child(2) { background:var(--c2); animation-delay:.2s; }
+.ldot:nth-child(3) { background:var(--c3); animation-delay:.4s; }
+@keyframes ldance { 0%,80%,100%{transform:scale(.65);opacity:.35} 40%{transform:scale(1.15);opacity:1} }
+.ltitle { font-family:'Syne',sans-serif; font-size:34px; font-weight:800; color:var(--text); margin-bottom:10px; letter-spacing:-0.5px; }
+.lsteps { margin-top:28px; display:flex; flex-direction:column; gap:7px; max-width:460px; margin-left:auto; margin-right:auto; }
+.lstep {
+  font-size:13px; color:var(--muted); padding:10px 18px;
+  background:var(--panel); border-radius:var(--r);
+  border:1px solid var(--border); opacity:0; transition:all .4s ease;
+  display:flex; align-items:center; gap:10px;
+}
+.lstep.active { opacity:1; color:var(--c3); border-color:rgba(6,214,160,.22); background:var(--c3f); }
+.lstep.active::before { content:'✓'; font-size:11px; }
+.lstep:not(.active)::before { content:'○'; font-size:11px; }
+
+/* ═══════════════════════════════════════
+   RESULT SCREEN
+═══════════════════════════════════════ */
+.rhdr {
+  position:relative; overflow:hidden;
+  background:linear-gradient(135deg, rgba(255,107,53,.1) 0%, rgba(6,214,160,.06) 100%);
+  border:1.5px solid rgba(255,107,53,.25);
+  border-radius:var(--rx); padding:30px 30px 26px; margin-bottom:24px;
+}
+.rhdr::before {
+  content:''; position:absolute; top:-40px; right:-40px;
+  width:200px; height:200px; border-radius:50%;
+  background:radial-gradient(circle, rgba(255,209,102,.1) 0%, transparent 70%);
+}
+.rbadge {
+  display:inline-flex; align-items:center; gap:7px;
+  font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:2px;
+  color:var(--c1); background:var(--c1f); border:1px solid rgba(255,107,53,.25);
+  border-radius:100px; padding:5px 14px; margin-bottom:12px;
+}
+.rbadge::before { content:'⬟'; font-size:9px; }
+.rtitle { font-family:'Syne',sans-serif; font-size:clamp(22px,3.5vw,34px); font-weight:800; color:var(--text); margin-bottom:6px; letter-spacing:-0.5px; }
+.rscope { font-size:13px; font-weight:500; color:var(--c2); margin-bottom:8px; }
+.rissue { font-size:14px; color:var(--text2); line-height:1.6; font-weight:300; max-width:680px; }
+
+/* Summary cards */
+.sgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:8px; margin-bottom:20px; }
+.scard { background:var(--panel); border:1px solid var(--border); border-radius:var(--r); padding:12px 15px; }
+.slbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:5px; }
+.sval { font-size:13px; font-weight:500; color:var(--text2); }
+
+/* Report sections */
+.report-section {
+  background:var(--panel); border:1.5px solid var(--border);
+  border-radius:var(--r); margin-bottom:8px; overflow:hidden; transition:var(--t);
+}
+.report-section:hover { border-color:var(--border2); }
+.rs-head {
+  display:flex; align-items:center; gap:10px; padding:14px 16px;
+  cursor:pointer; user-select:none;
+}
+.rs-head:hover { background:rgba(255,255,255,.02); }
+.rs-num {
+  width:28px; height:28px; border-radius:7px; flex-shrink:0;
+  background:var(--panel2); font-size:12px; font-weight:700; color:var(--muted);
+  display:flex; align-items:center; justify-content:center;
+}
+.report-section.open .rs-num { background:var(--c1f); color:var(--c1); }
+.rs-title { flex:1; font-size:14px; font-weight:600; color:var(--text); }
+.rs-badge { font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:1px; border-radius:100px; padding:3px 11px; }
+.rs-badge.critical  { background:rgba(224,84,84,.15);  color:#e05454; border:1px solid rgba(224,84,84,.25); }
+.rs-badge.important { background:rgba(255,209,102,.12); color:var(--c2); border:1px solid rgba(255,209,102,.25); }
+.rs-badge.note      { background:rgba(6,214,160,.1);   color:var(--c3); border:1px solid rgba(6,214,160,.2); }
+.rs-chev { font-size:18px; color:var(--muted); transition:var(--t); flex-shrink:0; }
+.report-section.open .rs-chev { transform:rotate(90deg); color:var(--c1); }
+.rs-body { display:none; padding:0 16px 16px 54px; font-size:13.5px; color:var(--text2); line-height:1.7; }
+.report-section.open .rs-body { display:block; }
+.rs-body p { margin-bottom:0; }
+.rs-std {
+  margin-top:12px; padding:9px 13px;
+  background:var(--c4f); border:1px solid rgba(17,138,178,.2);
+  border-radius:7px; font-size:12px; color:#6ab8d4;
+}
+
+/* Product note box */
+.nbox {
+  background:linear-gradient(135deg,rgba(255,209,102,.08),rgba(6,214,160,.05));
+  border:1.5px solid rgba(255,209,102,.2);
+  border-radius:var(--rx); padding:22px 24px; margin-bottom:20px;
+}
+.nbox-t { font-family:'Syne',sans-serif; font-size:15px; font-weight:700; color:var(--c2); margin-bottom:10px; }
+.nbox-d { font-size:13.5px; color:var(--text2); line-height:1.65; }
+
+/* MAPEI product highlight box */
+.mapei-box {
+  background:linear-gradient(135deg, rgba(17,138,178,.1), rgba(6,214,160,.06));
+  border:1.5px solid rgba(17,138,178,.3);
+  border-radius:var(--rx); padding:22px 24px; margin-bottom:20px;
+}
+.mapei-box-t {
+  display:flex; align-items:center; gap:10px;
+  font-family:'Syne',sans-serif; font-size:15px; font-weight:700; color:#6ab8d4; margin-bottom:14px;
+}
+.mapei-logo-badge {
+  background:rgba(17,138,178,.2); border:1px solid rgba(17,138,178,.3);
+  border-radius:7px; padding:3px 10px; font-size:11px; font-weight:700;
+  color:#6ab8d4; text-transform:uppercase; letter-spacing:1.5px;
+}
+.mapei-product {
+  background:var(--panel); border:1px solid var(--border); border-radius:var(--r);
+  padding:14px 16px; margin-bottom:8px;
+  display:flex; align-items:flex-start; gap:12px;
+}
+.mapei-product:last-child { margin-bottom:0; }
+.mapei-product-name { font-size:13.5px; font-weight:600; color:var(--text); margin-bottom:4px; }
+.mapei-product-desc { font-size:12px; color:var(--muted); line-height:1.5; }
+.mapei-tag { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--c4); background:var(--c4f); border-radius:100px; padding:2px 9px; display:inline-block; margin-top:5px; }
+
+/* Action row */
+.arow { display:flex; gap:10px; flex-wrap:wrap; margin-top:22px; }
+
+/* Error box */
+.errbox { background:rgba(224,84,84,.08); border:1px solid rgba(224,84,84,.2); border-radius:var(--r); padding:14px 16px; margin-top:14px; font-size:13px; color:#e05454; line-height:1.6; display:none; }
+.errbox.vis { display:block; }
+
+/* Done screen */
+#scr-done { text-align:center; padding:60px 0 40px; }
+.dico { font-size:64px; margin-bottom:20px; animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both; }
+@keyframes popIn { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+.dtitle { font-family:'Syne',sans-serif; font-size:42px; font-weight:800; letter-spacing:-1px; color:var(--text); margin-bottom:12px; }
+.dsub { font-size:15px; color:var(--muted); max-width:480px; margin:0 auto 28px; line-height:1.7; font-weight:300; }
+.dref {
+  display:inline-block; font-family:'Outfit',monospace; font-size:24px; font-weight:700;
+  color:var(--c2); background:var(--c2f); border:1px solid rgba(255,209,102,.25);
+  border-radius:var(--r); padding:10px 28px; margin:0 auto 32px; letter-spacing:2px;
+}
+.demail-note { font-size:13px; color:var(--muted); margin-top:10px; }
+.demail-note strong { color:var(--c3); }
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+#toast {
+  position:fixed; bottom:28px; left:50%;
+  transform:translateX(-50%) translateY(70px);
+  background:var(--bg3); border:1.5px solid var(--border2);
+  border-radius:100px; padding:11px 22px;
+  font-size:13px; z-index:999; white-space:nowrap;
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+}
+#toast.show { transform:translateX(-50%) translateY(0); }
+#toast.err { border-color:#e05454; color:#e05454; }
+#toast.ok  { border-color:var(--c3); color:var(--c3); }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media (max-width:640px) {
+  #hdr { padding:0 16px; }
+  .hbadge span { display:none; }
+  #wrap { padding:28px 14px 80px; }
+  .wpillars { grid-template-columns:1fr; }
+  .ogrid,.ogrid.c2,.ogrid.c3 { grid-template-columns:1fr 1fr; }
+  .irow { grid-template-columns:1fr; }
+  .sgrid { grid-template-columns:1fr 1fr; }
+  .arow { flex-direction:column; }
+  .hero-logo { width:88px; height:88px; }
+  .hero-logo-inner svg { width:38px; height:38px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Animated mesh background -->
+<div class="mesh">
+  <div class="mesh-orb"></div>
+  <div class="mesh-orb"></div>
+  <div class="mesh-orb"></div>
+</div>
+
+<!-- ════════════════════════════════════
+     HEADER
+════════════════════════════════════ -->
+<header id="hdr">
+  <div class="hlogo" onclick="if(ST&&ST.screen!=='welcome')resetAll()">
+    <div class="logo-icon">
+      <!-- Construction/chemistry flask SVG logo -->
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 8V24L8 38C7.3 39.1 8 40.5 9.3 40.5H38.7C40 40.5 40.7 39.1 40 38L30 24V8" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M15 8H33" stroke="white" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="17" cy="33" r="2.5" fill="rgba(255,255,255,0.7)"/>
+        <circle cx="26" cy="30" r="1.8" fill="rgba(255,255,255,0.5)"/>
+        <circle cx="31" cy="35" r="2" fill="rgba(255,255,255,0.7)"/>
+      </svg>
+    </div>
+    <div class="logo-text">
+      <div class="logo-name">CCENA</div>
+      <div class="logo-sub">Construction Chemicals · Neutral Advice</div>
+    </div>
+  </div>
+  <div class="hbadge">
+    <div class="hbadge-dot"></div>
+    <span>AI-Powered · Fully Independent</span>
+  </div>
+</header>
+
+<div id="progwrap"><div id="progbar" style="width:0%"></div></div>
+
+<!-- ════════════════════════════════════
+     APP SHELL
+════════════════════════════════════ -->
+<div id="app">
+<div id="wrap">
+
+  <!-- Step Trail -->
+  <div id="trail"></div>
+
+  <!-- ══════════════════════════════
+       WELCOME
+  ══════════════════════════════ -->
+  <div class="scr on" id="scr-welcome">
+
+    <!-- Animated logo hero -->
+    <div class="hero-logo">
+      <div class="hero-logo-ring"></div>
+      <div class="hero-logo-inner">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 8V24L8 38C7.3 39.1 8 40.5 9.3 40.5H38.7C40 40.5 40.7 39.1 40 38L30 24V8" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M15 8H33" stroke="white" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="17" cy="33" r="2.5" fill="rgba(255,255,255,0.85)"/>
+          <circle cx="26" cy="30" r="1.8" fill="rgba(255,255,255,0.6)"/>
+          <circle cx="31" cy="35" r="2" fill="rgba(255,255,255,0.85)"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="wbadge">🛡️ &nbsp;No commercial interests · No supplier bias</div>
+    <h1 class="wtitle">TRUST THE<br>CHEMISTRY.<br><span class="hi">NOT THE PITCH.</span></h1>
+    <p class="wsub">Get expert, independent advice on construction chemical products — the same guidance a specialist consultant charges thousands for. Powered by AI. Zero supplier influence.</p>
+
+    <div class="wpillars">
+      <div class="wp">
+        <div class="wp-ico">🎯</div>
+        <div class="wp-t">Right Product, Not Popular</div>
+        <div class="wp-d">We recommend what your conditions demand — not what's on a supplier's target list.</div>
+      </div>
+      <div class="wp">
+        <div class="wp-ico">⚖️</div>
+        <div class="wp-t">Genuinely Independent</div>
+        <div class="wp-d">Zero supplier relationships, zero commission, zero incentive other than your project's success.</div>
+      </div>
+      <div class="wp">
+        <div class="wp-ico">🔬</div>
+        <div class="wp-t">Expert Chemistry Engine</div>
+        <div class="wp-d">Our AI has deep knowledge of construction chemistry, standards, and failure modes.</div>
+      </div>
+    </div>
+
+    <button class="btn btn-g wstart" onclick="startApp()">Begin Free Consultation →</button>
+
+    <div class="wscopes">
+      <div class="wpill">💧 Waterproofing</div>
+      <div class="wpill">🎨 Coatings</div>
+      <div class="wpill">🏗️ Flooring Systems</div>
+      <div class="wpill">🔧 Concrete Repair</div>
+      <div class="wpill">🏠 Roofing</div>
+      <div class="wpill">🚿 Wet Areas</div>
+      <div class="wpill">🔗 Joint Sealants</div>
+      <div class="wpill">🧱 Tile &amp; Adhesives</div>
+      <div class="wpill">💉 Injection &amp; Grouting</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       STEP 1 — ROLE
+  ══════════════════════════════ -->
+  <div class="scr" id="scr-s1">
+    <div class="eyebrow">Step 1 of 6 — Your Role</div>
+    <h2 class="qtitle">Who are you on this project?</h2>
+    <p class="qsub">This tailors the technical depth and decision level of our guidance.</p>
+
+    <div class="ogrid" id="grid-role">
+      <div class="ocard" onclick="pickOne(this,'role')"><div class="ochk"></div><span class="oico">📐</span><div class="olbl">Consultant / Engineer</div><div class="odsc">Specifying or designing</div></div>
+      <div class="ocard" onclick="pickOne(this,'role')"><div class="ochk"></div><span class="oico">🏗️</span><div class="olbl">Contractor / Applicator</div><div class="odsc">Executing site work</div></div>
+      <div class="ocard" onclick="pickOne(this,'role')"><div class="ochk"></div><span class="oico">🏢</span><div class="olbl">Client / Project Owner</div><div class="odsc">Commissioning the work</div></div>
+      <div class="ocard" onclick="pickOne(this,'role')"><div class="ochk"></div><span class="oico">🏠</span><div class="olbl">End User / Homeowner</div><div class="odsc">Hands-on or personal project</div></div>
+      <div class="ocard" onclick="pickOne(this,'role')"><div class="ochk"></div><span class="oico">🛒</span><div class="olbl">Procurement / Estimator</div><div class="odsc">Sourcing or pricing materials</div></div>
+      <div class="ocard" onclick="pickOne(this,'role')"><div class="ochk"></div><span class="oico">🎓</span><div class="olbl">Student / Researcher</div><div class="odsc">Learning or academic</div></div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="back()">← Back</button>
+      <button class="btn btn-g" onclick="next(1)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       STEP 2 — SCOPE
+  ══════════════════════════════ -->
+  <div class="scr" id="scr-s2">
+    <div class="eyebrow">Step 2 of 6 — Scope</div>
+    <h2 class="qtitle">What construction chemical scope?</h2>
+    <p class="qsub">Select the primary scope you need guidance on — this drives the entire recommendation engine.</p>
+
+    <div class="ogrid c2" id="grid-scope">
+      <div class="ocard" onclick="pickOne(this,'scope');showContextHint()" data-v="Below-Grade Waterproofing"><div class="ochk"></div><span class="oico">💧</span><div class="olbl">Below-Grade Waterproofing</div><div class="odsc">Basements, foundations, tunnels, retaining walls</div></div>
+      <div class="ocard" onclick="pickOne(this,'scope');showContextHint()" data-v="Wet Area Waterproofing"><div class="ochk"></div><span class="oico">🚿</span><div class="olbl">Wet Area Waterproofing</div><div class="odsc">Bathrooms, showers, balconies, kitchens</div></div>
+      <div class="ocard" onclick="pickOne(this,'scope');showContextHint()" data-v="Roof Waterproofing and Coatings"><div class="ochk"></div><span class="oico">🏠</span><div class="olbl">Roof Waterproofing &amp; Coatings</div><div class="odsc">Flat roofs, podium decks, roof gardens</div></div>
+      <div class="ocard" onclick="pickOne(this,'scope');showContextHint()" data-v="Protective Coatings for Concrete or Steel"><div class="ochk"></div><span class="oico">🎨</span><div class="olbl">Protective Coatings</div><div class="odsc">Steel structures, concrete surfaces, industrial</div></div>
+      <div class="ocard" onclick="pickOne(this,'scope');showContextHint()" data-v="Industrial or Commercial Flooring"><div class="ochk"></div><span class="oico">🏗️</span><div class="olbl">Flooring Systems</div><div class="odsc">Industrial floors, resin coatings, screeds</div></div>
+      <div class="ocard" onclick="pickOne(this,'scope');showContextHint()" data-v="Concrete Repair and Rehabilitation"><div class="ochk"></div><span class="oico">🔧</span><div class="olbl">Concrete Repair &amp; Rehabilitation</div><div class="odsc">Spalling, carbonation, rebar corrosion</div></div>
+      <div class="ocard" onclick="pickOne(this,'scope');showContextHint()" data-v="Joint Sealants and Movement Joints"><div class="ochk"></div><span class="oico">🔗</span><div class="olbl">Joint Sealants</div><div class="odsc">Movement joints, construction joints, expansion</div></div>
+      <div class="ocard" onclick="pickOne(this,'scope');showContextHint()" data-v="Tile Adhesives and Fixing Systems"><div class="ochk"></div><span class="oico">🧱</span><div class="olbl">Adhesives &amp; Tile Fixing</div><div class="odsc">Ceramic, porcelain, natural stone, flooring</div></div>
+      <div class="ocard" onclick="pickOne(this,'scope');showContextHint()" data-v="Grouting, Anchoring and Void Filling"><div class="ochk"></div><span class="oico">⚙️</span><div class="olbl">Grouting &amp; Anchoring</div><div class="odsc">Machine bases, anchor bolts, precision grouting</div></div>
+      <div class="ocard" onclick="pickOne(this,'scope');showContextHint()" data-v="Crack Injection and Active Leak Stopping"><div class="ochk"></div><span class="oico">💉</span><div class="olbl">Crack Injection &amp; Leak Stopping</div><div class="odsc">Active leaks, structural crack injection</div></div>
+    </div>
+
+    <!-- Smart context hint — dynamically populated -->
+    <div id="context-hint"></div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="back()">← Back</button>
+      <button class="btn btn-g" onclick="next(2)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       STEP 3 — SUBSTRATE + CONDITIONS
+  ══════════════════════════════ -->
+  <div class="scr" id="scr-s3">
+    <div class="eyebrow">Step 3 of 6 — Substrate &amp; Conditions</div>
+    <h2 class="qtitle" id="s3-title">Surface &amp; exposure conditions?</h2>
+    <p class="qsub" id="s3-sub">Select the substrate and all relevant exposure conditions. We'll determine the right chemistry.</p>
+
+    <div class="fl" style="margin-bottom:8px">Substrate (select all that apply)</div>
+    <div class="mhint">⚡ Multiple selection</div>
+    <div class="ogrid c3" id="grid-sub">
+      <div class="ocard" onclick="pickMany(this,'sub')"><div class="ochk"></div><span class="oico">🏛️</span><div class="olbl">Concrete</div><div class="odsc">Slabs, walls, columns</div></div>
+      <div class="ocard" onclick="pickMany(this,'sub')"><div class="ochk"></div><span class="oico">🧱</span><div class="olbl">Masonry / Blockwork</div><div class="odsc">Brick, block, render</div></div>
+      <div class="ocard" onclick="pickMany(this,'sub')"><div class="ochk"></div><span class="oico">⚙️</span><div class="olbl">Steel / Metal</div><div class="odsc">Structural, pipework, tanks</div></div>
+      <div class="ocard" onclick="pickMany(this,'sub')"><div class="ochk"></div><span class="oico">🪟</span><div class="olbl">Screed / Mortar</div><div class="odsc">Sand:cement, self-levelling</div></div>
+      <div class="ocard" onclick="pickMany(this,'sub')"><div class="ochk"></div><span class="oico">🌲</span><div class="olbl">Timber / Wood</div><div class="odsc">Structural, decking</div></div>
+      <div class="ocard" onclick="pickMany(this,'sub')"><div class="ochk"></div><span class="oico">🔵</span><div class="olbl">Existing Tiles</div><div class="odsc">Tile-on-tile, refurbishment</div></div>
+      <div class="ocard" onclick="pickMany(this,'sub')"><div class="ochk"></div><span class="oico">✨</span><div class="olbl">Existing Membrane</div><div class="odsc">Over prior waterproofing</div></div>
+      <div class="ocard other-t" onclick="pickMany(this,'sub','oexp-sub')"><div class="ochk"></div><span class="oico">✏️</span><div class="olbl">Other</div><div class="odsc">Describe below</div></div>
+    </div>
+    <div class="oexp" id="oexp-sub">
+      <div class="fl">Describe substrate</div>
+      <textarea id="txt-sub" placeholder="e.g. Cast iron, GRP, bitumen felt, plywood, polystyrene insulation…"></textarea>
+    </div>
+
+    <div class="div"></div>
+
+    <div class="fl" style="margin-bottom:8px">Exposure Conditions (select all that apply)</div>
+    <div class="mhint">⚡ Multiple selection</div>
+    <div class="ogrid c2" id="grid-cond">
+      <div class="ocard" onclick="pickMany(this,'cond')"><div class="ochk"></div><span class="oico">💦</span><div class="olbl">Permanent Water / Hydrostatic Pressure</div><div class="odsc">Below water table, tanks, reservoirs</div></div>
+      <div class="ocard" onclick="pickMany(this,'cond')"><div class="ochk"></div><span class="oico">🌊</span><div class="olbl">Intermittent Wet / Splash</div><div class="odsc">Not permanently submerged</div></div>
+      <div class="ocard" onclick="pickMany(this,'cond')"><div class="ochk"></div><span class="oico">💨</span><div class="olbl">Negative-Side Water Pressure</div><div class="odsc">Water pushing from behind substrate</div></div>
+      <div class="ocard" onclick="pickMany(this,'cond')"><div class="ochk"></div><span class="oico">☀️</span><div class="olbl">UV / Sunlight Exposure</div><div class="odsc">Directly exposed to sun</div></div>
+      <div class="ocard" onclick="pickMany(this,'cond')"><div class="ochk"></div><span class="oico">🏭</span><div class="olbl">Chemical / Oil / Fuel Exposure</div><div class="odsc">Acids, alkalis, solvents, fuels</div></div>
+      <div class="ocard" onclick="pickMany(this,'cond')"><div class="ochk"></div><span class="oico">🔥</span><div class="olbl">High Temperature</div><div class="odsc">Above 80°C in service</div></div>
+      <div class="ocard" onclick="pickMany(this,'cond')"><div class="ochk"></div><span class="oico">🌡️</span><div class="olbl">Thermal Movement / Cycling</div><div class="odsc">Significant expansion &amp; contraction</div></div>
+      <div class="ocard" onclick="pickMany(this,'cond')"><div class="ochk"></div><span class="oico">⚡</span><div class="olbl">Heavy Traffic / Mechanical Abrasion</div><div class="odsc">Vehicles, forklifts, heavy foot traffic</div></div>
+      <div class="ocard" onclick="pickMany(this,'cond')"><div class="ochk"></div><span class="oico">🌊</span><div class="olbl">Coastal / Marine / Salt Air</div><div class="odsc">Chloride-laden atmosphere</div></div>
+      <div class="ocard" onclick="pickMany(this,'cond')"><div class="ochk"></div><span class="oico">🍽️</span><div class="olbl">Food / Potable Water Contact</div><div class="odsc">Requires certified approval</div></div>
+      <div class="ocard" onclick="pickMany(this,'cond')"><div class="ochk"></div><span class="oico">🔩</span><div class="olbl">Cracked / Moving Substrate</div><div class="odsc">Live or dormant cracks present</div></div>
+      <div class="ocard other-t" onclick="pickMany(this,'cond','oexp-cond')"><div class="ochk"></div><span class="oico">✏️</span><div class="olbl">Other</div><div class="odsc">Describe below</div></div>
+    </div>
+    <div class="oexp" id="oexp-cond">
+      <div class="fl">Describe the condition</div>
+      <textarea id="txt-cond" placeholder="e.g. Cryogenic, anti-graffiti, livestock contact, radiation shielding…"></textarea>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="back()">← Back</button>
+      <button class="btn btn-g" onclick="next(3)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       STEP 4 — PROJECT CONTEXT
+  ══════════════════════════════ -->
+  <div class="scr" id="scr-s4">
+    <div class="eyebrow">Step 4 of 6 — Project Context</div>
+    <h2 class="qtitle">Tell us about the project.</h2>
+    <p class="qsub">A few quick questions that affect system design life, cure window and performance class.</p>
+
+    <div class="fl" style="margin-bottom:8px">Project type</div>
+    <div class="ogrid c3" id="grid-ptype" style="margin-bottom:20px">
+      <div class="ocard" onclick="pickOne(this,'ptype')"><div class="ochk"></div><span class="oico">🏗️</span><div class="olbl">New Construction</div></div>
+      <div class="ocard" onclick="pickOne(this,'ptype')"><div class="ochk"></div><span class="oico">🔄</span><div class="olbl">Refurbishment</div></div>
+      <div class="ocard" onclick="pickOne(this,'ptype')"><div class="ochk"></div><span class="oico">🚨</span><div class="olbl">Emergency Repair</div></div>
+    </div>
+
+    <div class="fl" style="margin-bottom:8px">Application setting</div>
+    <div class="ogrid c3" id="grid-setting" style="margin-bottom:20px">
+      <div class="ocard" onclick="pickOne(this,'setting')"><div class="ochk"></div><span class="oico">🏠</span><div class="olbl">Interior</div><div class="odsc">Inside a building</div></div>
+      <div class="ocard" onclick="pickOne(this,'setting')"><div class="ochk"></div><span class="oico">🌤️</span><div class="olbl">Exterior</div><div class="odsc">Exposed to elements</div></div>
+      <div class="ocard" onclick="pickOne(this,'setting')"><div class="ochk"></div><span class="oico">🕳️</span><div class="olbl">Underground / Buried</div><div class="odsc">Below grade or buried</div></div>
+    </div>
+
+    <div class="fl" style="margin-bottom:8px">Required warranty / service life</div>
+    <div class="ogrid c3" id="grid-warranty" style="margin-bottom:20px">
+      <div class="ocard" onclick="pickOne(this,'warranty')"><div class="ochk"></div><span class="oico">🗓️</span><div class="olbl">Up to 5 Years</div></div>
+      <div class="ocard" onclick="pickOne(this,'warranty')"><div class="ochk"></div><span class="oico">🛡️</span><div class="olbl">10 Years</div></div>
+      <div class="ocard" onclick="pickOne(this,'warranty')"><div class="ochk"></div><span class="oico">⭐</span><div class="olbl">15–20 Years</div></div>
+      <div class="ocard" onclick="pickOne(this,'warranty')"><div class="ochk"></div><span class="oico">💎</span><div class="olbl">25+ Years</div></div>
+      <div class="ocard" onclick="pickOne(this,'warranty')"><div class="ochk"></div><span class="oico">❓</span><div class="olbl">No Specific Requirement</div></div>
+    </div>
+
+    <div class="div"></div>
+    <div class="ifield">
+      <div class="fl">Approximate area / quantity (optional)</div>
+      <input type="text" id="inp-area" placeholder="e.g. 500 m², 200 LM of joint, 20 anchors — or TBC"/>
+    </div>
+    <div class="ifield">
+      <div class="fl">Additional project context (optional)</div>
+      <textarea id="inp-notes" placeholder="e.g. Access limitations, occupied building, specific problem description, budget range, programme constraints…"></textarea>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="back()">← Back</button>
+      <button class="btn btn-g" onclick="next(4)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       STEP 5 — COMPLIANCE
+  ══════════════════════════════ -->
+  <div class="scr" id="scr-s5">
+    <div class="eyebrow">Step 5 of 6 — Standards &amp; Compliance</div>
+    <h2 class="qtitle">Any compliance requirements?</h2>
+    <p class="qsub">Working to a consultant spec or authority standard? Select below. Our guidance will reference the right clauses. Skip if not applicable.</p>
+
+    <div class="mhint">⚡ Multiple selection</div>
+    <div class="ogrid c2" id="grid-specs">
+      <div class="ocard" onclick="pickMany(this,'specs')"><div class="ochk"></div><span class="oico">🔵</span><div class="olbl">BS / EN (British / European)</div><div class="odsc">BS EN standards and Eurocodes</div></div>
+      <div class="ocard" onclick="pickMany(this,'specs')"><div class="ochk"></div><span class="oico">🇺🇸</span><div class="olbl">ASTM / ACI (American)</div><div class="odsc">US standards and codes</div></div>
+      <div class="ocard" onclick="pickMany(this,'specs')"><div class="ochk"></div><span class="oico">🌍</span><div class="olbl">ISO International</div><div class="odsc">ISO standards</div></div>
+      <div class="ocard" onclick="pickMany(this,'specs')"><div class="ochk"></div><span class="oico">🏗️</span><div class="olbl">Local Building Code / Authority</div><div class="odsc">National or local authority requirement</div></div>
+      <div class="ocard" onclick="pickMany(this,'specs')"><div class="ochk"></div><span class="oico">💧</span><div class="olbl">Potable Water / NSF Approval</div><div class="odsc">Drinking water contact certification</div></div>
+      <div class="ocard" onclick="pickMany(this,'specs')"><div class="ochk"></div><span class="oico">🌱</span><div class="olbl">LEED / Sustainability Rating</div><div class="odsc">Green building certification required</div></div>
+      <div class="ocard" onclick="pickMany(this,'specs')"><div class="ochk"></div><span class="oico">✅</span><div class="olbl">No Compliance Requirement</div><div class="odsc">No specific standard required</div></div>
+      <div class="ocard other-t" onclick="pickMany(this,'specs','oexp-specs')"><div class="ochk"></div><span class="oico">✏️</span><div class="olbl">Other Standard</div><div class="odsc">Describe below</div></div>
+    </div>
+    <div class="oexp" id="oexp-specs">
+      <div class="fl">Describe the compliance requirement</div>
+      <textarea id="txt-specs" placeholder="e.g. Client-specific spec, proprietary system requirement, fire rating…"></textarea>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-s" onclick="back()">← Back</button>
+      <button class="btn btn-g" onclick="next(5)">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       STEP 6 — YOUR DETAILS + PREFERENCES
+  ══════════════════════════════ -->
+  <div class="scr" id="scr-s6">
+    <div class="eyebrow">Step 6 of 6 — Your Details &amp; Report Options</div>
+    <h2 class="qtitle">Almost there — how would you like your report?</h2>
+    <p class="qsub">Enter your details so we can send the PDF report to your inbox, and choose what you want the report to deliver. <strong>Select as many options as you need.</strong></p>
+
+    <div class="irow">
+      <div class="ifield">
+        <div class="fl">Your name *</div>
+        <input type="text" id="inp-name" placeholder="Full name"/>
+      </div>
+      <div class="ifield">
+        <div class="fl">Email address * (report PDF sent here)</div>
+        <input type="email" id="inp-email" placeholder="your@email.com"/>
+      </div>
+    </div>
+    <div class="irow">
+      <div class="ifield">
+        <div class="fl">Company / Organisation (optional)</div>
+        <input type="text" id="inp-company" placeholder="Company name"/>
+      </div>
+      <div class="ifield">
+        <div class="fl">Project name / reference (optional)</div>
+        <input type="text" id="inp-project" placeholder="Project name or ref"/>
+      </div>
+    </div>
+
+    <div class="div"></div>
+
+    <div class="fl" style="margin-bottom:12px">What should the report include? (select multiple)</div>
+
+    <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px" id="grid-pref">
+      <div class="pref-card" onclick="togglePref(this,'Neutral Spec Only')">
+        <div class="pref-chk"></div>
+        <div class="pref-card-ico">📋</div>
+        <div class="pref-card-body">
+          <div class="pref-card-title">Neutral Technical Specification</div>
+          <div class="pref-card-desc">Performance requirements and chemistry class only. No brand names. Use this to evaluate any supplier or write a brand-neutral tender spec.</div>
+        </div>
+      </div>
+      <div class="pref-card" onclick="togglePref(this,'Mapei Product Recommendation')">
+        <div class="pref-chk"></div>
+        <div class="pref-card-ico">🏭</div>
+        <div class="pref-card-body">
+          <div class="pref-card-title">Mapei Product Recommendation</div>
+          <div class="pref-card-desc">Suggest specific Mapei products that match the specification requirements, with product names and system guidance.</div>
+        </div>
+      </div>
+      <div class="pref-card" onclick="togglePref(this,'Product Comparison (Multi-Brand)')">
+        <div class="pref-chk"></div>
+        <div class="pref-card-ico">⚖️</div>
+        <div class="pref-card-body">
+          <div class="pref-card-title">Multi-Brand Product Comparison</div>
+          <div class="pref-card-desc">Compare example products from multiple manufacturers against the specification. Fully independent — no commercial relationships.</div>
+        </div>
+      </div>
+      <div class="pref-card" onclick="togglePref(this,'Application Method Guide')">
+        <div class="pref-chk"></div>
+        <div class="pref-card-ico">🛠️</div>
+        <div class="pref-card-body">
+          <div class="pref-card-title">Application Method Guide</div>
+          <div class="pref-card-desc">Step-by-step preparation and application guidance for the recommended system, including critical checkpoints.</div>
+        </div>
+      </div>
+      <div class="pref-card" onclick="togglePref(this,'Failure Modes & What Not To Do')">
+        <div class="pref-chk"></div>
+        <div class="pref-card-ico">⚠️</div>
+        <div class="pref-card-body">
+          <div class="pref-card-title">Failure Modes &amp; What Not To Do</div>
+          <div class="pref-card-desc">The critical mistakes and incompatible products to avoid. Often the most valuable part of expert advice.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload section -->
+    <div class="fl" style="margin-bottom:8px">Upload drawings, photos or specs (optional)</div>
+    <div class="upzone" id="upzone" onclick="document.getElementById('finp').click()">
+      <input type="file" id="finp" multiple accept=".pdf,.jpg,.jpeg,.png,.dwg" onchange="addFiles(this.files)" style="display:none"/>
+      <div class="ui">📎</div>
+      <div class="ut">Drop files here or <strong>click to browse</strong><br>PDF, images, DWG — up to 10 MB each</div>
+    </div>
+    <div class="flist" id="flist"></div>
+
+    <div class="errbox" id="errmsg">Please fill in all required fields marked *</div>
+
+    <div class="nav" style="margin-top:24px">
+      <button class="btn btn-s" onclick="back()">← Back</button>
+      <button class="btn btn-g" onclick="generateReport()">✦ Generate My Expert Report →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       LOADING
+  ══════════════════════════════ -->
+  <div class="scr" id="scr-loading">
+    <div class="ldots">
+      <div class="ldot"></div>
+      <div class="ldot"></div>
+      <div class="ldot"></div>
+    </div>
+    <div class="ltitle">Analysing Your Requirements</div>
+    <p style="color:var(--muted);font-size:14px;font-weight:300;margin-top:8px">Our construction chemistry AI is reviewing your project conditions and generating your independent expert report…</p>
+    <div class="lsteps" id="lsteps"></div>
+  </div>
+
+  <!-- ══════════════════════════════
+       RESULT
+  ══════════════════════════════ -->
+  <div class="scr" id="scr-result">
+
+    <div class="rhdr">
+      <div class="rbadge">CCENA Independent Assessment</div>
+      <div class="rtitle" id="r-title">Your Expert Report</div>
+      <div class="rscope" id="r-scope"></div>
+      <div class="rissue" id="r-intro"></div>
+    </div>
+
+    <!-- Input summary chips -->
+    <div class="sgrid" id="r-summary"></div>
+
+    <!-- AI report content -->
+    <div id="ai-report-wrap"></div>
+
+    <!-- Mapei product suggestions (conditionally shown) -->
+    <div class="mapei-box" id="mapei-box" style="display:none">
+      <div class="mapei-box-t">
+        <div class="mapei-logo-badge">MAPEI</div>
+        Suggested Mapei Products for This Specification
+      </div>
+      <div id="mapei-products-wrap"></div>
+      <p style="font-size:12px;color:var(--muted);margin-top:14px">⚠️ Always verify current MAPEI Technical Data Sheets before procurement. Products suggested are indicative — confirm suitability with your MAPEI technical representative. <a href="https://www.mapei.com" target="_blank" style="color:var(--c4)">www.mapei.com →</a></p>
+    </div>
+
+    <!-- Neutral / product note -->
+    <div class="nbox" id="r-nbox">
+      <div class="nbox-t">⚖️ On Product Names &amp; Neutrality</div>
+      <div class="nbox-d" id="r-nbox-d"></div>
+    </div>
+
+    <!-- Standards note -->
+    <div class="rs-std" id="r-std-note" style="display:none;margin-bottom:20px"></div>
+
+    <div class="arow">
+      <button class="btn btn-g btn-full" style="flex:2" onclick="sendEmailReport()">📧 Email Report to Me (PDF)</button>
+      <button class="btn btn-t btn-full" style="flex:1" onclick="dlReport()">⬇ Download .txt</button>
+      <button class="btn btn-s" onclick="resetAll()" style="border-radius:var(--r);padding:14px;font-size:14px;white-space:nowrap">↺ New Consultation</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       DONE
+  ══════════════════════════════ -->
+  <div class="scr" id="scr-done">
+    <div class="dico">📬</div>
+    <div class="dtitle">REPORT SENT</div>
+    <p class="dsub">Your CCENA expert report has been compiled and dispatched to your inbox. Check your email — including spam — for the PDF summary.</p>
+    <div class="dref" id="d-ref">CCN-000000</div>
+    <div class="demail-note">Sent to: <strong id="d-email-display"></strong></div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:28px">
+      <button class="btn btn-g" onclick="showResult()">← View Report</button>
+      <button class="btn btn-s" onclick="resetAll()">New Consultation</button>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+</div><!-- /app -->
+
+<div id="toast"></div>
+
+<!-- ════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════ -->
+<script>
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+const ST = {
+  screen: 'welcome',
+  sel: {}, selV: {}, other: {},
+  prefList: [],   // multi-select preference list
+  files: [],
+  name:'', email:'', company:'', project:'',
+  area:'', notes:'',
+  aiReport: null,
+  refCode: ''
+};
+
+const STEP_NAMES = ['','Your Role','Scope','Substrate & Conditions','Project Context','Compliance','Details & Report Options'];
+const TOTAL_STEPS = 6;
+
+// ═══════════════════════════════════════════
+//  SMART CONTEXT HINTS (scope-aware)
+// ═══════════════════════════════════════════
+const SCOPE_HINTS = {
+  'Below-Grade Waterproofing': 'Key consideration: <strong>water pressure direction matters</strong>. Below-grade systems must handle positive hydrostatic pressure. We\'ll ask about water table depth and negative-side scenarios.',
+  'Wet Area Waterproofing': 'Wet areas require <strong>crack-bridging and tiled-over compatibility</strong>. The system must withstand thermal cycling from hot water. Adhesive and grout compatibility will be factored in.',
+  'Roof Waterproofing and Coatings': 'Roofs face <strong>UV degradation, thermal cycling, and ponded water</strong>. We\'ll distinguish between trafficable, non-trafficable, and inverted warm roof configurations.',
+  'Protective Coatings for Concrete or Steel': 'Coating selection depends on <strong>exposure class and substrate pH</strong>. Carbonation, chloride ingress and existing corrosion all influence the system type.',
+  'Industrial or Commercial Flooring': 'Industrial floors require <strong>wear resistance, chemical resistance or hygiene compliance</strong> depending on use. Moisture in the substrate is a critical installation risk factor.',
+  'Concrete Repair and Rehabilitation': 'Effective repair requires <strong>compatible repair mortar and re-alkalization</strong>. Mismatch in modulus of elasticity between repair mortar and substrate is a primary failure mode.',
+  'Joint Sealants and Movement Joints': 'Movement joint sealants must accommodate <strong>the actual anticipated movement</strong>. Over- or under-designing joint width causes premature failure in most cases.',
+  'Tile Adhesives and Fixing Systems': 'Tile adhesive classification (C1, C2, S1, S2) must match <strong>substrate movement and tile format</strong>. Large-format tiles over 60x60cm require deformable adhesive as a minimum.',
+  'Grouting, Anchoring and Void Filling': 'Precision grouting requires <strong>non-shrink, high-flow, and load-bearing properties</strong>. Cementitious vs epoxy vs polyurethane depends on load type and cure time constraints.',
+  'Crack Injection and Active Leak Stopping': 'Active leaks need <strong>hydrophilic polyurethane foam injection</strong> first to stop flow, followed by structural consolidation. Epoxy injection on active leaks always fails.'
+};
+
+function showContextHint() {
+  const scope = (ST.selV['scope'] || ST.sel['scope'] || [])[0];
+  const hint = scope ? SCOPE_HINTS[scope] : null;
+  const el = document.getElementById('context-hint');
+  if (hint) {
+    el.innerHTML = '💡 <strong>Expert tip:</strong> ' + hint;
+    el.style.display = 'block';
+    // Also update step 3 title/sub based on scope
+    updateS3ForScope(scope);
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+function updateS3ForScope(scope) {
+  const subQ = document.getElementById('s3-title');
+  const subD = document.getElementById('s3-sub');
+  const scopeSubQ = {
+    'Below-Grade Waterproofing':   'What is the substrate and what water pressures apply?',
+    'Wet Area Waterproofing':      'What surface and wet exposure pattern?',
+    'Industrial or Commercial Flooring': 'What floor substrate and what traffic / chemical loads?',
+    'Concrete Repair and Rehabilitation': 'What concrete condition and what caused the deterioration?',
+    'Tile Adhesives and Fixing Systems': 'What substrate and what tile type / format?'
+  };
+  if (subQ && scopeSubQ[scope]) subQ.textContent = scopeSubQ[scope];
+}
+
+// ═══════════════════════════════════════════
+//  SCREEN ROUTING
+// ═══════════════════════════════════════════
+function show(id) {
+  document.querySelectorAll('.scr').forEach(s => s.classList.remove('on'));
+  const el = document.getElementById('scr-' + id);
+  if (el) el.classList.add('on');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  updateProgress();
+}
+
+function startApp() { ST.screen = 's1'; show('s1'); }
+
+function back() {
+  const map = { s1:'welcome', s2:'s1', s3:'s2', s4:'s3', s5:'s4', s6:'s5', result:'s6' };
+  const prev = map[ST.screen];
+  if (!prev) { ST.screen='welcome'; show('welcome'); return; }
+  ST.screen = prev; show(prev);
+}
+
+function next(stepNum) {
+  if (stepNum === 1 && !hasSel('role'))  { toast('Please select your role', true); return; }
+  if (stepNum === 2 && !hasSel('scope')) { toast('Please select a scope', true); return; }
+  if (stepNum === 3) {
+    if (!hasSel('sub'))  { toast('Please select at least one substrate', true); return; }
+    if (!hasSel('cond')) { toast('Please select at least one condition', true); return; }
+    captureOther('oexp-sub',  'txt-sub');
+    captureOther('oexp-cond', 'txt-cond');
+  }
+  if (stepNum === 4 && !hasSel('ptype')) { toast('Please select project type', true); return; }
+  if (stepNum === 5) captureOther('oexp-specs', 'txt-specs');
+
+  const nextId = 's' + (stepNum + 1);
+  ST.screen = nextId; show(nextId);
+}
+
+function hasSel(key) { return ST.sel[key] && ST.sel[key].length > 0; }
+
+function captureOther(panelId, txtId) {
+  const p = document.getElementById(panelId);
+  const t = document.getElementById(txtId);
+  if (p && p.classList.contains('vis') && t && t.value.trim()) ST.other[panelId] = t.value.trim();
+}
+
+function updateProgress() {
+  const m = { welcome:0, s1:1, s2:2, s3:3, s4:4, s5:5, s6:6, loading:6, result:6, done:6 };
+  const n = m[ST.screen] || 0;
+  const pct = (ST.screen === 'result' || ST.screen === 'done') ? 100 : Math.round((n / TOTAL_STEPS) * 100);
+  document.getElementById('progbar').style.width = pct + '%';
+
+  const trail = document.getElementById('trail');
+  if (n === 0) { trail.style.display = 'none'; return; }
+  trail.style.display = 'flex';
+  let h = '';
+  for (let i = 1; i <= TOTAL_STEPS; i++) {
+    if      (i < n)  h += `<div class="tdot done" title="${STEP_NAMES[i]}"></div>`;
+    else if (i === n) h += `<div class="tdot now"></div>`;
+    else              h += `<div class="tdot" title="${STEP_NAMES[i]}"></div>`;
+  }
+  h += `<span class="tlabel">${STEP_NAMES[n]||''}</span>`;
+  trail.innerHTML = h;
+}
+
+// ═══════════════════════════════════════════
+//  SELECTION HELPERS
+// ═══════════════════════════════════════════
+function pickOne(card, key) {
+  card.closest('.ogrid').querySelectorAll('.ocard').forEach(c => c.classList.remove('sel'));
+  card.classList.add('sel');
+  const lbl = card.querySelector('.olbl').textContent.trim();
+  const dv  = card.dataset.v || lbl;
+  ST.sel[key]  = [lbl];
+  ST.selV[key] = [dv];
+  card.closest('.scr').querySelectorAll('.oexp').forEach(p => p.classList.remove('vis'));
+}
+
+function pickMany(card, key, otherId) {
+  card.classList.toggle('sel');
+  const selCards = Array.from(card.closest('.ogrid').querySelectorAll('.ocard.sel'));
+  ST.sel[key]  = selCards.map(c => c.querySelector('.olbl').textContent.trim());
+  ST.selV[key] = selCards.map(c => (c.dataset.v || c.querySelector('.olbl').textContent.trim()));
+  if (otherId) {
+    const p = document.getElementById(otherId);
+    if (p) {
+      if (card.classList.contains('sel') && card.classList.contains('other-t'))   p.classList.add('vis');
+      if (!card.classList.contains('sel') && card.classList.contains('other-t')) p.classList.remove('vis');
+    }
+  }
+}
+
+// Multi-select preference (Step 6)
+function togglePref(card, value) {
+  card.classList.toggle('sel');
+  if (card.classList.contains('sel')) {
+    if (!ST.prefList.includes(value)) ST.prefList.push(value);
+  } else {
+    ST.prefList = ST.prefList.filter(v => v !== value);
+  }
+}
+
+// ═══════════════════════════════════════════
+//  FILE UPLOAD
+// ═══════════════════════════════════════════
+function addFiles(files) {
+  Array.from(files).forEach(f => { if (!ST.files.find(x => x.name === f.name)) ST.files.push(f); });
+  renderFiles();
+}
+function renderFiles() {
+  document.getElementById('flist').innerHTML = ST.files.map((f,i) =>
+    `<div class="fi"><span class="fi-n">📄 ${f.name} <span style="color:var(--muted);font-size:11px">${(f.size/1024).toFixed(0)} KB</span></span><span class="fi-r" onclick="rmFile(${i})">✕</span></div>`
+  ).join('');
+}
+function rmFile(i) { ST.files.splice(i, 1); renderFiles(); }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const uz = document.getElementById('upzone');
+  if (!uz) return;
+  uz.addEventListener('dragover',  e => { e.preventDefault(); uz.classList.add('dov'); });
+  uz.addEventListener('dragleave', ()  => uz.classList.remove('dov'));
+  uz.addEventListener('drop', e => { e.preventDefault(); uz.classList.remove('dov'); addFiles(e.dataTransfer.files); });
+});
+
+// ═══════════════════════════════════════════
+//  MAPEI PRODUCT DATABASE (curated by scope)
+// ═══════════════════════════════════════════
+const MAPEI_DB = {
+  'Below-Grade Waterproofing': [
+    { name:'Planiseal CR1', tag:'Structural Membrane', desc:'Fast-curing, 100%-solids cold-fluid-applied single-component moisture-curing structural waterproofing membrane. VOC-compliant, suitable horizontal and vertical. Apply by roller, brush, or trowel.' },
+    { name:'Planiseal 88', tag:'Cementitious Coating', desc:'Cement-based, waterproofing and surface-preparation coating. Suitable for positive and negative-side applications on concrete, masonry and block.' },
+    { name:'Planiseal Plug', tag:'Water Stop / Leak Sealer', desc:'Ultra quick-setting hydraulic cement. Stops active leaks instantly — use as first step before applying the main waterproofing membrane system.' },
+    { name:'Mapedrain TD', tag:'Drainage Composite', desc:'High-strength three-dimensional drainage composite for foundation walls. Channels hydrostatic water away from the membrane to reduce pressure.' }
+  ],
+  'Wet Area Waterproofing': [
+    { name:'Mapelastic AquaDefense', tag:'Liquid Membrane', desc:'Premixed advanced liquid-rubber, extremely quick-drying waterproofing and crack-isolation membrane for showers, bathrooms, and balconies. ANSI A118.10, AS 3740 compliant.' },
+    { name:'Mapelastic WaterStop', tag:'Flexible Membrane', desc:'Flexible, fast-drying, one-component liquid-rubber waterproofing and crack-isolation membrane for installation under ceramic and stone tile finishes.' },
+    { name:'Mapelastic', tag:'Flexible Cementitious', desc:'Two-component polymer-modified flexible cementitious waterproofing membrane. Ideal for balconies, terraces, and wet rooms — compatible with Keraflex tile adhesives.' }
+  ],
+  'Roof Waterproofing and Coatings': [
+    { name:'Mapecoat Deck T', tag:'Trafficable Coating', desc:'Water-based slip-resistant coating for pedestrian and light wheeled-traffic on concrete deck surfaces. UV-stable, suitable for podium decks and balconies.' },
+    { name:'Mapecoat Deck S', tag:'Protective Topcoat', desc:'Water-based urethane-modified acrylic coating for new and previously coated concrete and masonry roofs. Provides durable weathering protection.' },
+    { name:'Elastocolor', tag:'Elastomeric Coating', desc:'High-build elastomeric coating for façades and concrete walls. Bridges hairline cracks, resists carbonation, and provides UV and weather resistance.' }
+  ],
+  'Protective Coatings for Concrete or Steel': [
+    { name:'Elastocolor', tag:'Elastomeric / Anti-Carbonation', desc:'High-build elastomeric coating offering crack bridging, carbonation resistance and UV protection. Suitable for concrete facades and structural elements.' },
+    { name:'ECO Prim Grip', tag:'Adhesion Primer', desc:'Ready-to-use, low-VOC synthetic resin-based primer. Improves adhesion of self-levelling underlayments and plasters to smooth, non-absorbent substrates including tiles.' },
+    { name:'Planicrete AC', tag:'Bonding Agent / Primer', desc:'One-component, concentrate bonding agent for improving adhesion between new and old concrete, between concrete and mortar screeds.' }
+  ],
+  'Industrial or Commercial Flooring': [
+    { name:'Mapefloor Finish 415 NA', tag:'Polyurethane Topcoat', desc:'Two-component, solvent-free, aromatic polyurethane topcoat for elevated concrete surfaces. Protective wear coat for traffic-bearing industrial floors.' },
+    { name:'Novoplan 2 Plus', tag:'Self-Levelling Underlayment', desc:'High-strength, self-levelling, cement-based underlayment and repair mix for interior concrete and engineer-approved floors.' },
+    { name:'Topcem Premix', tag:'Screed Mortar', desc:'Accelerated-cure screed mortar suitable for bonded and unbonded applications. Conventional workability with fast early strength gain.' },
+    { name:'Ultraplan', tag:'Self-Levelling', desc:'Self-levelling cement-based underlayment compound for smoothing and levelling floors before final covering installation.' }
+  ],
+  'Concrete Repair and Rehabilitation': [
+    { name:'Planitop X', tag:'Overhead / Vertical Repair Mortar', desc:'Non-sag, cementitious repair mortar suitable for overhead and vertical concrete repair. Suitable for structural repair to EN 1504-3 Class R3.' },
+    { name:'Planitop XS', tag:'Fine Repair Mortar', desc:'One-component fine finishing repair mortar for concrete. Ideal as a final levelling coat over structural repair mortars — feather-edge application capability.' },
+    { name:'Planitop 12 SR', tag:'Structural Repair — Extreme Environments', desc:'High-performance structural repair mortar for extreme environments including marine, coastal, and industrial exposure. Corrosion inhibitor system included.' },
+    { name:'Planitop 330 Fast', tag:'Quick-Set Render Mortar', desc:'Rapid-setting polymer-modified render mortar. Ready for tile installation in as little as 90 minutes. Non-sagging on vertical surfaces.' }
+  ],
+  'Joint Sealants and Movement Joints': [
+    { name:'Mapeflex PU 45 FT', tag:'PU Movement Joint Sealant', desc:'One-component, moisture-curing polyurethane sealant for movement joints in façades, floors, and wet areas. Paintable, UV-stable grade available.' },
+    { name:'Mapesil AC', tag:'Acetoxy Silicone Sealant', desc:'Acetoxy-curing silicone sealant with antimicrobial additive. Suitable for perimeter sealing in wet areas, including joints between tiles and sanitary fixtures.' },
+    { name:'Mapesil LM', tag:'Neutral-Cure Silicone', desc:'Low-modulus neutral-cure silicone sealant. For movement joints adjacent to natural stone, aluminium, and other sensitive materials where acetoxy cure is unsuitable.' }
+  ],
+  'Tile Adhesives and Fixing Systems': [
+    { name:'Keraflex Maxi S1', tag:'C2TE S1 Tile Adhesive', desc:'Highly deformable, polymer-modified, cementitious tile adhesive. EN 12004 Class C2TE S1. Suitable for large-format tiles, heated floors, and external applications.' },
+    { name:'Ultralite S1 Quick', tag:'Lightweight Fast-Set S1', desc:'Lightweight, fast-setting, deformable tile adhesive with Easy Glide Technology. Reduced weight vs standard adhesives — ideal for large porcelain slabs overhead.' },
+    { name:'Kerapoxy', tag:'Epoxy Grout & Adhesive', desc:'Two-component epoxy grout and adhesive. Chemical-resistant, stain-proof, and suitable for food industry, swimming pools, and aggressive environments.' },
+    { name:'Ultracolor Plus FA', tag:'CG2 WA Grout', desc:'Fast-setting, ultra-coloured, polymer-modified, water-resistant cement grout. Drop-in water-resistant performance for grout joints 2–20 mm.' }
+  ],
+  'Grouting, Anchoring and Void Filling': [
+    { name:'Mapefill', tag:'Non-Shrink Cementitious Grout', desc:'Non-shrink, flowable cementitious precision grout for machine bases, column bases, and structural connections. Expanding on set for complete void filling.' },
+    { name:'Mapegrout Fast-Set', tag:'Rapid Structural Repair', desc:'Fast-setting, non-shrink cementitious repair mortar for structural elements. Suitable for patching, void filling, and restoring load-bearing sections rapidly.' }
+  ],
+  'Crack Injection and Active Leak Stopping': [
+    { name:'Planiseal Plug', tag:'Hydraulic Cement — Emergency Leak Stop', desc:'Ultra quick-setting hydraulic cement. Stops active water leaks within seconds. Step 1 in any wet crack repair system before applying membrane or injection resin.' },
+    { name:'Mapeflex PU 45 FT', tag:'PU Crack Sealant', desc:'One-component polyurethane sealant also suitable for dormant crack sealing at surface level. Use after hydraulic cement plug has stopped active flow.' }
+  ]
+};
+
+function getMapeiProducts(scope) {
+  // Find best match
+  if (!scope) return [];
+  const key = Object.keys(MAPEI_DB).find(k => scope.includes(k) || k.includes(scope) || scope === k);
+  return key ? MAPEI_DB[key] : [];
+}
+
+// ═══════════════════════════════════════════
+//  GENERATE REPORT
+// ═══════════════════════════════════════════
+async function generateReport() {
+  ST.name    = document.getElementById('inp-name').value.trim();
+  ST.email   = document.getElementById('inp-email').value.trim();
+  ST.company = document.getElementById('inp-company').value.trim();
+  ST.project = document.getElementById('inp-project').value.trim();
+
+  const errEl = document.getElementById('errmsg');
+  if (!ST.name || !ST.email || !ST.email.includes('@')) {
+    errEl.classList.add('vis');
+    errEl.textContent = !ST.name ? 'Please enter your name.' : 'Please enter a valid email address.';
+    return;
+  }
+  if (ST.prefList.length === 0) {
+    errEl.classList.add('vis');
+    errEl.textContent = 'Please choose at least one report option above.';
+    return;
+  }
+  errEl.classList.remove('vis');
+
+  ST.area  = document.getElementById('inp-area').value.trim();
+  ST.notes = document.getElementById('inp-notes').value.trim();
+
+  ST.screen = 'loading'; show('loading');
+  animateLoadingSteps();
+
+  const wantsMapei = ST.prefList.includes('Mapei Product Recommendation');
+
+  const SYSTEM_PROMPT = `You are CCENA — Construction Chemicals Expert Neutral Advice. You are a world-class independent construction chemistry consultant with 30+ years of experience across waterproofing, protective coatings, concrete repair, flooring, grouting, joint sealants, and tile fixing systems.
+
+You have comprehensive knowledge of the MAPEI product range including: Planiseal series (CR1, 88, Plug, Easy), Mapelastic series (AquaDefense, WaterStop, Mapelastic), Mapecoat series (Deck T, Deck S), Planitop series (X, XS, 12 SR, 330 Fast), Mapefloor series, Topcem, Novoplan, Ultraplan, Keraflex series (Maxi S1), Ultralite S1 Quick, Kerapoxy, Ultracolor Plus, Mapeflex PU 45 FT, Mapesil AC/LM, Mapefill, Elastocolor, ECO Prim Grip, Planicrete AC, Mapedrain TD series, and the full Construction and Restoration Systems line.
+
+RULES:
+1. Be BRIEF and DIRECT. No waffle, no repetition. Each section should be punchy — 2-4 sentences max unless detail is critical.
+2. Lead with the key action or decision. Don't bury the point.
+3. Use **bold** for key terms and product names.
+4. Flag the #1 failure mode for each recommendation.
+5. When suggesting Mapei products (if requested), give the exact product name and one-sentence reason why it fits THIS specific scenario.
+6. Reference standards briefly inline (e.g. "EN 1504-3 Class R3") — don't explain the standard.
+7. Be honest about limitations. If site investigation is needed, say so.
+
+RESPONSE FORMAT: Respond ONLY with valid JSON — no preamble, no markdown fences. Exact structure:
+{
+  "summary": "2 sentences max: key challenge and the right approach",
+  "sections": [
+    {
+      "title": "Short title (5 words max)",
+      "priority": "critical|important|note",
+      "detail": "2-4 sentences. Lead with the key point. Use **bold** for key terms.",
+      "standard": "Standard ref or empty string"
+    }
+  ],
+  "productNote": "One paragraph: what the ideal product must achieve, chemistry class required, and key datasheet parameters to verify",
+  "criticalWarning": "Single sentence — the #1 thing NOT to do in this scenario. Or empty string."
+}
+
+Generate exactly 4-5 sections. Make each section genuinely specific to the user's described conditions — not generic.`;
+
+  const prompt = buildPrompt();
+
+  try {
+    const response = await fetch('/.netlify/functions/ask-claude', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: SYSTEM_PROMPT, messages: [{ role: 'user', content: prompt }] })
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error || `Server error ${response.status}`);
+    }
+
+    const data = await response.json();
+    const raw = data.content.filter(b => b.type === 'text').map(b => b.text).join('');
+    const clean = raw.replace(/```json|```/g, '').trim();
+
+    let parsed;
+    try {
+      const start = clean.indexOf('{'); const end = clean.lastIndexOf('}');
+      if (start === -1 || end === -1) throw new Error('No JSON');
+      parsed = JSON.parse(clean.substring(start, end + 1));
+    } catch {
+      parsed = {
+        summary: 'Your expert assessment has been generated. Please review the details below.',
+        sections: [{ title:'Technical Assessment', priority:'important', detail: raw.substring(0, 2000), standard:'' }],
+        productNote: 'Please review the technical details and contact CCENA for further guidance.',
+        criticalWarning: ''
+      };
+    }
+
+    ST.aiReport = parsed;
+    buildResultScreen(wantsMapei);
+    ST.screen = 'result'; show('result');
+
+  } catch (err) {
+    console.error(err);
+    ST.screen = 's6'; show('s6');
+    const errEl = document.getElementById('errmsg');
+    errEl.classList.add('vis');
+    let msg = err.message || 'Unknown error';
+    if (msg === 'no_key') msg = '🔑 No API key set — add ANTHROPIC_API_KEY in Netlify environment variables.';
+    else if (msg.includes('401')) msg = '🔑 Invalid API key — check ANTHROPIC_API_KEY in Netlify.';
+    else if (msg.includes('429')) msg = '⏳ Too many requests — please wait a moment and try again.';
+    errEl.textContent = msg;
+    toast('Report generation failed', true);
+  }
+}
+
+// ═══════════════════════════════════════════
+//  BUILD PROMPT
+// ═══════════════════════════════════════════
+function buildPrompt() {
+  const scope    = (ST.selV['scope']   || ST.sel['scope']   || ['Not specified'])[0];
+  const role     = (ST.sel['role']     || ['Not specified'])[0];
+  const sub      = (ST.sel['sub']      || ['Not specified']).join(', ');
+  const cond     = (ST.sel['cond']     || ['Not specified']).join(', ');
+  const ptype    = (ST.sel['ptype']    || ['Not specified'])[0];
+  const setting  = (ST.sel['setting']  || ['Not specified'])[0];
+  const warranty = (ST.sel['warranty'] || ['Not specified'])[0];
+  const specs    = (ST.sel['specs']    || ['None']).join(', ');
+
+  const prefs = ST.prefList.length ? ST.prefList.join(', ') : 'Neutral Spec Only';
+
+  return `CCENA CONSULTATION
+
+ROLE: ${role}
+SCOPE: ${scope}
+SUBSTRATE: ${sub}${ST.other['oexp-sub'] ? ' / '+ST.other['oexp-sub'] : ''}
+CONDITIONS: ${cond}${ST.other['oexp-cond'] ? ' / '+ST.other['oexp-cond'] : ''}
+PROJECT: ${ptype} | ${setting} | Warranty: ${warranty}
+AREA: ${ST.area || 'Not stated'}
+COMPLIANCE: ${specs}${ST.other['oexp-specs'] ? ' / '+ST.other['oexp-specs'] : ''}
+NOTES: ${ST.notes || 'None'}
+REPORT OPTIONS REQUESTED: ${prefs}
+FILES: ${ST.files.length ? ST.files.map(f=>f.name).join(', ') : 'None'}
+
+Provide a concise, expert, independent assessment specific to these conditions.`;
+}
+
+// ═══════════════════════════════════════════
+//  BUILD RESULT SCREEN
+// ═══════════════════════════════════════════
+function buildResultScreen(wantsMapei) {
+  const R = ST.aiReport;
+  const scope   = (ST.sel['scope']   || ['General Assessment'])[0];
+  const ptype   = (ST.sel['ptype']   || [''])[0];
+  const setting = (ST.sel['setting'] || [''])[0];
+
+  document.getElementById('r-title').textContent = scope + ' — Expert Assessment';
+  document.getElementById('r-scope').textContent = scope;
+  document.getElementById('r-intro').textContent = R.summary || '';
+
+  // Summary cards
+  const pairs = [
+    ['Role',        (ST.sel['role']    || ['—'])[0]],
+    ['Substrate',   (ST.sel['sub']     || ['—']).join(', ')],
+    ['Conditions',  condSummary()],
+    ['Project',     [ptype, setting].filter(Boolean).join(' · ') || '—'],
+    ['Warranty',    (ST.sel['warranty']|| ['—'])[0]],
+    ['Compliance',  complianceSummary()]
+  ];
+  document.getElementById('r-summary').innerHTML = pairs.map(([l,v]) =>
+    `<div class="scard"><div class="slbl">${l}</div><div class="sval">${escHtml(v)}</div></div>`
+  ).join('');
+
+  // Critical warning
+  if (R.criticalWarning && R.criticalWarning.trim()) {
+    const wb = document.createElement('div');
+    wb.style.cssText = 'background:rgba(224,84,84,.08);border:1.5px solid rgba(224,84,84,.25);border-radius:var(--r);padding:15px 18px;margin-bottom:14px;font-size:13.5px;color:#e05454;line-height:1.65';
+    wb.innerHTML = `<strong>⚠️ Critical: </strong>${markdownBold(escHtml(R.criticalWarning))}`;
+    document.getElementById('ai-report-wrap').before(wb);
+  }
+
+  // Sections accordion
+  const wrap = document.getElementById('ai-report-wrap');
+  wrap.innerHTML = '';
+  (R.sections || []).forEach((sec, i) => {
+    const priority = (sec.priority || 'note').toLowerCase();
+    const badgeClass = priority === 'critical' ? 'critical' : priority === 'important' ? 'important' : 'note';
+    const div = document.createElement('div');
+    div.className = 'report-section' + (i === 0 ? ' open' : '');
+    div.id = `sec-${i}`;
+    div.innerHTML = `
+      <div class="rs-head" onclick="toggleSec(${i})">
+        <div class="rs-num">${i+1}</div>
+        <div class="rs-title">${escHtml(sec.title||'Recommendation')}</div>
+        <span class="rs-badge ${badgeClass}">${priority.charAt(0).toUpperCase()+priority.slice(1)}</span>
+        <span class="rs-chev">›</span>
+      </div>
+      <div class="rs-body">
+        <p>${markdownBold(escHtml(sec.detail||''))}</p>
+        ${sec.standard ? `<div class="rs-std">📐 ${escHtml(sec.standard)}</div>` : ''}
+      </div>`;
+    wrap.appendChild(div);
+  });
+
+  // Mapei products (if selected)
+  const scopeVal = (ST.selV['scope'] || ST.sel['scope'] || [])[0] || '';
+  const mapeiProds = getMapeiProducts(scopeVal);
+  const mapeiBox = document.getElementById('mapei-box');
+  if (wantsMapei && mapeiProds.length > 0) {
+    mapeiBox.style.display = 'block';
+    document.getElementById('mapei-products-wrap').innerHTML = mapeiProds.map(p => `
+      <div class="mapei-product">
+        <div style="flex-shrink:0;font-size:22px;margin-top:2px">🟦</div>
+        <div>
+          <div class="mapei-product-name">${escHtml(p.name)}</div>
+          <div class="mapei-tag">${escHtml(p.tag)}</div>
+          <div class="mapei-product-desc" style="margin-top:6px">${escHtml(p.desc)}</div>
+        </div>
+      </div>`).join('');
+  } else {
+    mapeiBox.style.display = 'none';
+  }
+
+  // Neutrality / product note
+  const prefs = ST.prefList;
+  let noteHtml = '';
+  if (prefs.includes('Neutral Spec Only') && prefs.length === 1) {
+    noteHtml = 'You requested a <strong>neutral specification</strong>. The sections above describe performance requirements and chemistry class only. Use this to evaluate any supplier objectively. CCENA has no commercial relationships with any manufacturer.';
+  } else if (prefs.includes('Mapei Product Recommendation')) {
+    noteHtml = `You requested <strong>Mapei product suggestions</strong>. ${R.productNote || ''} <strong>Important:</strong> CCENA has no commercial relationship with Mapei or any manufacturer. These are independent suggestions based on technical fit — always verify current Technical Data Sheets.`;
+  } else {
+    noteHtml = `${R.productNote || ''} <strong>CCENA is entirely independent</strong> — no supplier fees, commissions, or partnerships influence any recommendation.`;
+  }
+  document.getElementById('r-nbox-d').innerHTML = noteHtml;
+
+  // Standards note
+  const specs = ST.sel['specs'] || [];
+  const stdNote = document.getElementById('r-std-note');
+  if (specs.length && !specs.includes('No Compliance Requirement')) {
+    stdNote.style.display = 'flex'; stdNote.textContent = '📋 Compliance references for ' + specs.join(', ') + ' are cited in the relevant sections above.';
+  } else { stdNote.style.display = 'none'; }
+}
+
+function toggleSec(i) {
+  const el = document.getElementById('sec-' + i);
+  if (el) el.classList.toggle('open');
+}
+
+function condSummary() {
+  const c = ST.sel['cond'] || [];
+  if (!c.length) return '—';
+  if (c.length <= 2) return c.join(', ');
+  return c.slice(0,2).join(', ') + ` +${c.length-2} more`;
+}
+
+function complianceSummary() {
+  const s = ST.sel['specs'] || [];
+  if (!s.length || s.includes('No Compliance Requirement')) return 'None specified';
+  if (s.length <= 2) return s.join(', ');
+  return s[0] + ` +${s.length-1} more`;
+}
+
+// ═══════════════════════════════════════════
+//  LOADING ANIMATION
+// ═══════════════════════════════════════════
+const LOAD_MSGS = [
+  'Reviewing project scope and conditions…',
+  'Analysing substrate compatibility…',
+  'Evaluating chemistry options…',
+  'Cross-referencing applicable standards…',
+  'Compiling expert recommendations…',
+  'Finalising your independent report…'
+];
+function animateLoadingSteps() {
+  const el = document.getElementById('lsteps');
+  el.innerHTML = '';
+  LOAD_MSGS.forEach((msg, i) => {
+    const d = document.createElement('div');
+    d.className = 'lstep'; d.textContent = msg;
+    el.appendChild(d);
+    setTimeout(() => d.classList.add('active'), (i + 1) * 700);
+  });
+}
+
+// ═══════════════════════════════════════════
+//  EMAIL REPORT (calls Netlify send-report fn)
+// ═══════════════════════════════════════════
+async function sendEmailReport() {
+  const R = ST.aiReport;
+  if (!R) { toast('No report to send', true); return; }
+  if (!ST.email) { toast('No email address on file', true); return; }
+
+  ST.refCode = 'CCN-' + Math.floor(100000 + Math.random() * 900000);
+
+  // Build HTML email body
+  const scopeVal = (ST.sel['scope'] || ['General'])[0];
+  const date = new Date().toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+
+  const sectionsHtml = (R.sections||[]).map((s,i) => `
+    <tr><td style="padding:14px 0;border-bottom:1px solid #eee">
+      <strong style="color:#ff6b35">${i+1}. ${s.title||''}</strong>
+      <span style="font-size:11px;background:${s.priority==='critical'?'#fde8e8':s.priority==='important'?'#fff8e1':'#e8f8f0'};color:${s.priority==='critical'?'#c62828':s.priority==='important'?'#f57f17':'#2e7d32'};padding:2px 8px;border-radius:20px;margin-left:8px">${(s.priority||'note').toUpperCase()}</span>
+      <p style="margin:8px 0 0;color:#444;font-size:13px;line-height:1.6">${(s.detail||'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</p>
+      ${s.standard ? `<p style="font-size:11px;color:#1565c0;margin:6px 0 0">📐 ${s.standard}</p>` : ''}
+    </td></tr>`).join('');
+
+  const wantsMapei = ST.prefList.includes('Mapei Product Recommendation');
+  const mapeiProds = wantsMapei ? getMapeiProducts(scopeVal) : [];
+  const mapeiHtml = mapeiProds.length ? `
+    <h3 style="color:#1565c0;margin:24px 0 14px">🟦 Suggested Mapei Products</h3>
+    ${mapeiProds.map(p=>`<div style="background:#f0f7ff;border-radius:8px;padding:12px 16px;margin-bottom:8px">
+      <strong>${p.name}</strong> <span style="font-size:11px;color:#1565c0">${p.tag}</span>
+      <p style="margin:6px 0 0;font-size:12px;color:#555">${p.desc}</p>
+    </div>`).join('')}
+    <p style="font-size:11px;color:#888">Always verify against current Mapei Technical Data Sheets at www.mapei.com</p>` : '';
+
+  const html = `<!DOCTYPE html><html><body style="font-family:Outfit,Arial,sans-serif;max-width:680px;margin:0 auto;padding:20px;color:#222;background:#fff">
+    <div style="background:linear-gradient(135deg,#0a0e1a,#141d33);padding:28px;border-radius:14px;margin-bottom:24px;text-align:center">
+      <div style="font-size:32px;margin-bottom:8px">🧪</div>
+      <h1 style="color:#fff;font-size:24px;margin:0 0 6px;letter-spacing:-0.5px">CCENA Expert Report</h1>
+      <p style="color:#aaa;margin:0;font-size:13px">Construction Chemicals Expert Neutral Advice</p>
+      <div style="background:rgba(255,209,102,.2);border:1px solid rgba(255,209,102,.3);border-radius:20px;padding:5px 16px;display:inline-block;margin-top:14px">
+        <span style="color:#ffd166;font-size:12px;font-weight:600;letter-spacing:1px">REF: ${ST.refCode}</span>
+      </div>
+    </div>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px">
+      <tr><td style="padding:4px 0"><strong>Date:</strong></td><td>${date}</td></tr>
+      <tr><td style="padding:4px 0"><strong>Prepared for:</strong></td><td>${escHtml(ST.name)}${ST.company?' — '+escHtml(ST.company):''}</td></tr>
+      <tr><td style="padding:4px 0"><strong>Scope:</strong></td><td>${escHtml(scopeVal)}</td></tr>
+      ${ST.project?`<tr><td style="padding:4px 0"><strong>Project:</strong></td><td>${escHtml(ST.project)}</td></tr>`:''}
+    </table>
+    <div style="background:#fff8e1;border-left:4px solid #ff6b35;padding:14px 18px;border-radius:0 8px 8px 0;margin-bottom:20px">
+      <p style="margin:0;color:#333;font-size:14px;line-height:1.6"><strong>Summary:</strong> ${escHtml(R.summary||'')}</p>
+    </div>
+    ${R.criticalWarning ? `<div style="background:#fde8e8;border-left:4px solid #e05454;padding:14px 18px;border-radius:0 8px 8px 0;margin-bottom:20px"><p style="margin:0;color:#c62828;font-size:13px"><strong>⚠️ Critical Warning:</strong> ${escHtml(R.criticalWarning)}</p></div>` : ''}
+    <h3 style="color:#ff6b35;margin:0 0 10px">Technical Assessment</h3>
+    <table width="100%" cellpadding="0" cellspacing="0">${sectionsHtml}</table>
+    ${mapeiHtml}
+    <div style="background:#f9f9f9;border-radius:8px;padding:16px;margin-top:20px;font-size:12px;color:#888;line-height:1.6">
+      <strong style="color:#555">Disclaimer:</strong> This report is provided by CCENA as independent technical guidance only. CCENA has no commercial relationship with any manufacturer. Recommendations must be verified against current product data sheets before procurement. Site conditions should be assessed by a qualified professional before work commences.
+    </div>
+    <p style="text-align:center;color:#bbb;font-size:11px;margin-top:16px">CCENA — Construction Chemicals Expert Neutral Advice · ccena.io</p>
+  </body></html>`;
+
+  try {
+    toast('Sending report…');
+    const res = await fetch('/.netlify/functions/send-report', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        to: ST.email, name: ST.name,
+        subject: `Your CCENA Expert Report — ${scopeVal} (${ST.refCode})`,
+        html, refCode: ST.refCode
+      })
+    });
+    const data = await res.json();
+    if (!res.ok && !data.mock) throw new Error(data.error || 'Send failed');
+
+    document.getElementById('d-ref').textContent = ST.refCode;
+    document.getElementById('d-email-display').textContent = ST.email;
+    ST.screen = 'done'; show('done');
+    toast('Report sent to ' + ST.email, false);
+  } catch (err) {
+    // Even if email fails, show done screen (user can download)
+    document.getElementById('d-ref').textContent = ST.refCode;
+    document.getElementById('d-email-display').textContent = ST.email + ' (delivery pending)';
+    ST.screen = 'done'; show('done');
+    toast('Report saved — email delivery may be pending', false);
+  }
+}
+
+function showResult() { ST.screen = 'result'; show('result'); }
+
+// ═══════════════════════════════════════════
+//  DOWNLOAD REPORT (.txt)
+// ═══════════════════════════════════════════
+function dlReport() {
+  const R = ST.aiReport;
+  if (!R) { toast('No report to download', true); return; }
+  const scope = (ST.sel['scope'] || ['General'])[0];
+  const lines = [
+    'CCENA — CONSTRUCTION CHEMICALS EXPERT NEUTRAL ADVICE',
+    '='.repeat(55),
+    '',
+    `Date:    ${new Date().toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' })}`,
+    `Scope:   ${scope}`,
+    `For:     ${ST.name}${ST.company ? ' — ' + ST.company : ''}`,
+    `Project: ${ST.project || 'Not specified'}`,
+    `Email:   ${ST.email}`,
+    '',
+    'SUMMARY', '-'.repeat(40), R.summary || '', '',
+    R.criticalWarning ? '⚠️  CRITICAL: ' + R.criticalWarning + '\n' : '',
+    'TECHNICAL ASSESSMENT', '-'.repeat(40), ''
+  ];
+  (R.sections||[]).forEach((s,i) => {
+    lines.push(`${i+1}. [${(s.priority||'note').toUpperCase()}] ${s.title}`);
+    lines.push(stripHtml(s.detail||''));
+    if (s.standard) lines.push(`   Standards: ${s.standard}`);
+    lines.push('');
+  });
+  lines.push('PRODUCT GUIDANCE', '-'.repeat(40), stripHtml(R.productNote||''), '');
+  lines.push('DISCLAIMER', '-'.repeat(40));
+  lines.push('This report is independent technical guidance only. CCENA has no commercial relationship with any manufacturer.');
+
+  const blob = new Blob([lines.join('\n')], { type:'text/plain' });
+  const url  = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement('a'), { href:url, download:`CCENA-Report-${Date.now()}.txt` });
+  a.click(); URL.revokeObjectURL(url);
+}
+
+// ═══════════════════════════════════════════
+//  RESET
+// ═══════════════════════════════════════════
+function resetAll() {
+  Object.keys(ST.sel).forEach(k => delete ST.sel[k]);
+  Object.keys(ST.selV).forEach(k => delete ST.selV[k]);
+  Object.keys(ST.other).forEach(k => delete ST.other[k]);
+  ST.files = []; ST.prefList = [];
+  ST.name = ''; ST.email = ''; ST.company = ''; ST.project = '';
+  ST.area = ''; ST.notes = ''; ST.aiReport = null; ST.refCode = '';
+
+  document.querySelectorAll('.ocard,.pref-card').forEach(c => c.classList.remove('sel'));
+  document.querySelectorAll('.oexp').forEach(p => p.classList.remove('vis'));
+  document.querySelectorAll('textarea, input[type=text], input[type=email]').forEach(i => i.value = '');
+  document.getElementById('flist').innerHTML = '';
+  document.getElementById('ai-report-wrap').innerHTML = '';
+  document.getElementById('r-summary').innerHTML = '';
+  document.getElementById('context-hint').style.display = 'none';
+  document.getElementById('errmsg').classList.remove('vis');
+  document.getElementById('mapei-box').style.display = 'none';
+
+  const wb = document.querySelector('#scr-result [style*="rgba(224,84,84"]');
+  if (wb) wb.remove();
+
+  renderFiles();
+  ST.screen = 'welcome'; show('welcome');
+}
+
+// ═══════════════════════════════════════════
+//  UTILITIES
+// ═══════════════════════════════════════════
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function markdownBold(s) { return s.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>'); }
+function stripHtml(s) { return s.replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"'); }
+
+let _tt;
+function toast(msg, err) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (err ? ' err' : ' ok');
+  t.classList.add('show');
+  clearTimeout(_tt);
+  _tt = setTimeout(() => t.classList.remove('show'), 3500);
+}
+</script>
+</body>
+</html>
