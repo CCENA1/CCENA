@@ -575,31 +575,6 @@ textarea{min-height:88px;}
 
 <div id="app"><main>
 
-<!-- ══ API KEY ══ -->
-<div class="screen" id="s-key">
-  <div class="key-screen-wrap">
-    <div class="key-eyebrow">⚙️ One-Time Setup Required</div>
-    <div class="key-hero">Power Up<br>the <span>AI Engine.</span></div>
-    <p class="key-body">CCENA uses Anthropic's Claude AI to generate expert, vendor-neutral construction chemical advice. You need a free API key — takes 2 minutes.</p>
-    <div class="key-card">
-      <div class="key-card-ttl">Step 1 — Get your free API key</div>
-      <ol class="key-steps">
-        <li>Go to <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></li>
-        <li>Sign up or log in (free account)</li>
-        <li>Click <strong>API Keys</strong> → <strong>Create Key</strong></li>
-        <li>Copy the key — starts with <code style="background:rgba(255,255,255,0.07);padding:2px 7px;border-radius:4px;font-size:11px;font-family:'Space Mono',monospace">sk-ant-...</code></li>
-      </ol>
-      <div class="key-divider"></div>
-      <div class="key-card-ttl">Step 2 — Paste it here</div>
-      <input type="text" id="key-input" placeholder="sk-ant-api03-..." style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:0.3px"/>
-      <div class="key-note">🔒 Your key stays in this browser session only. Sent directly to Anthropic — never stored or shared.</div>
-    </div>
-    <button class="cta-btn" style="max-width:360px" onclick="applyKey()">
-      Activate &amp; Start Consultation
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-    </button>
-  </div>
-</div>
 
 <!-- ══ WELCOME ══ -->
 <div class="screen" id="s0">
@@ -915,14 +890,7 @@ function buildDots(step){
   el.innerHTML=h;
 }
 
-function applyKey(){
-  const k=document.getElementById('key-input').value.trim();
-  if(!k.startsWith('sk-')){showToast('Please enter a valid key starting with sk-',true);return;}
-  
-  showScreen('s0');
-  document.getElementById('prog').style.width='0%';
-  document.getElementById('hdr-step').textContent='';
-}
+
 
 window.addEventListener('load',()=>showScreen('s0'));
 
@@ -1156,4 +1124,3 @@ function showToast(msg,err){
 </script>
 </body>
 </html>
-
