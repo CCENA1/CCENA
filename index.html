@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -884,7 +885,7 @@ textarea{min-height:88px;}
 <div class="toast" id="toast"></div>
 
 <script>
-let API_KEY = '';
+// API key stored securely in Netlify environment - never exposed to browser
 const S = {sel:{},specs:[],files:[],cname:'',company:'',email:'',projname:'',area:'',location:'',notes:'',customSpec:'',aiRec:''};
 const TOTAL = 8;
 
@@ -918,13 +919,13 @@ function buildDots(step){
 function applyKey(){
   const k=document.getElementById('key-input').value.trim();
   if(!k.startsWith('sk-')){showToast('Please enter a valid key starting with sk-',true);return;}
-  API_KEY=k;
+  
   showScreen('s0');
   document.getElementById('prog').style.width='0%';
   document.getElementById('hdr-step').textContent='';
 }
 
-window.addEventListener('load',()=>showScreen('s-key'));
+window.addEventListener('load',()=>showScreen('s0'));
 
 function pick(card,key){
   card.closest('.opt-grid').querySelectorAll('.opt').forEach(c=>c.classList.remove('sel'));
@@ -1026,9 +1027,9 @@ async function callAI(targetId,customPrompt){
     '\n\nProvide: 1) Recommended system type and chemistry (no brand names) 2) Application requirements and critical success factors 3) QC and acceptance criteria 4) Critical cautions and failure modes 5) Standards compliance notes 6) Key questions to ask any supplier'
   );
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
+    const res=await fetch('/.netlify/functions/ask',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:SYS,messages:[{role:'user',content:prompt}]})
     });
     const data=await res.json();
@@ -1140,8 +1141,8 @@ function resetAll(){
   renderFiles();
   document.getElementById('prog').style.width='0%';
   document.getElementById('hdr-step').textContent='';
-  API_KEY='';
-  showScreen('s-key');
+  
+  showScreen('s0');
 }
 
 let tt;
