@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>CCENA — Construction Chemicals Expert Neutral Advice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --night:#0d0f12;
+  --night2:#141720;
+  --night3:#1e2230;
+  --card:#ffffff08;
+  --border:#ffffff14;
+  --border2:#ffffff22;
+  --ink:#f0ede8;
+  --ink2:#b8b4ae;
+  --ink3:#7a766f;
+  --amber:#f0a500;
+  --amber2:#ffc840;
+  --amber3:#fff1c2;
+  --teal:#00c9b1;
+  --teal2:#00f5d4;
+  --red:#ff5a5a;
+  --green:#00e07a;
+  --r:14px;
+  --t:0.2s cubic-bezier(0.4,0,0.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--night);
+  color:var(--ink);
+  font-family:'DM Sans',sans-serif;
+  font-size:15px;
+  line-height:1.65;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;
+}
+
+/* ── AMBIENT GLOW ── */
+.glow-orb{
+  position:fixed;
+  border-radius:50%;
+  filter:blur(120px);
+  pointer-events:none;
+  z-index:0;
+  opacity:0.18;
+}
+.glow-orb.g1{width:600px;height:600px;background:var(--amber);top:-200px;right:-200px;}
+.glow-orb.g2{width:500px;height:500px;background:var(--teal);bottom:-150px;left:-150px;}
+
+/* ── HEADER ── */
+header{
+  position:sticky;top:0;z-index:200;
+  background:rgba(13,15,18,0.88);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;height:68px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.logo-wrap{display:flex;align-items:center;gap:14px;}
+
+/* ── SVG LOGO MARK ── */
+.logo-svg{width:44px;height:44px;flex-shrink:0;}
+
+.logo-wordmark{display:flex;flex-direction:column;gap:1px;}
+.logo-name{
+  font-family:'Space Mono',monospace;
+  font-size:18px;font-weight:700;
+  letter-spacing:4px;color:var(--ink);
+  line-height:1;
+}
+.logo-full{
+  font-size:8.5px;font-weight:400;
+  color:var(--ink3);letter-spacing:1.8px;
+  text-transform:uppercase;line-height:1;
+  display:none;
+}
+@media(min-width:520px){.logo-full{display:block;}}
+
+.hdr-right{display:flex;align-items:center;gap:10px;}
+.status-pill{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(0,201,177,0.1);
+  border:1px solid rgba(0,201,177,0.25);
+  border-radius:100px;padding:6px 14px;
+  font-size:11px;font-weight:600;color:var(--teal);
+  letter-spacing:0.5px;
+}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 2s ease infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(1.4);}}
+#hdr-step{font-size:11px;font-weight:500;color:var(--ink3);letter-spacing:1px;text-transform:uppercase;}
+
+/* ── PROGRESS ── */
+.prog-rail{height:2px;background:var(--border);position:sticky;top:68px;z-index:199;}
+.prog-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--amber),var(--teal));
+  transition:width 0.6s cubic-bezier(0.4,0,0.2,1);
+  width:0%;
+  box-shadow:0 0 12px rgba(240,165,0,0.5);
+}
+
+/* ── LAYOUT ── */
+#app{position:relative;z-index:1;}
+main{max-width:840px;width:100%;margin:0 auto;padding:52px 20px 100px;}
+
+/* ── SCREENS ── */
+.screen{display:none;animation:fadeUp 0.4s cubic-bezier(0.4,0,0.2,1) both;}
+.screen.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+
+/* ══════════ API KEY SCREEN ══════════ */
+.key-screen-wrap{
+  min-height:80vh;display:flex;flex-direction:column;justify-content:center;
+}
+.key-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(240,165,0,0.1);border:1px solid rgba(240,165,0,0.25);
+  border-radius:100px;padding:6px 16px;
+  font-size:11px;font-weight:600;letter-spacing:2px;
+  text-transform:uppercase;color:var(--amber);
+  margin-bottom:28px;
+}
+.key-hero{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(40px,8vw,72px);
+  line-height:1.0;color:var(--ink);
+  margin-bottom:20px;letter-spacing:-1px;
+}
+.key-hero span{color:var(--amber);}
+.key-body{font-size:16px;color:var(--ink2);font-weight:300;max-width:520px;margin-bottom:36px;line-height:1.7;}
+
+.key-card{
+  background:var(--night2);
+  border:1px solid var(--border2);
+  border-radius:var(--r);padding:28px 24px;
+  margin-bottom:24px;max-width:540px;
+}
+.key-card-ttl{
+  font-size:10px;font-weight:700;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--ink3);margin-bottom:14px;
+}
+.key-steps{margin-left:16px;color:var(--ink2);font-size:14px;line-height:2.4;font-weight:300;}
+.key-steps a{color:var(--amber);font-weight:600;text-decoration:none;}
+.key-steps a:hover{color:var(--amber2);}
+.key-divider{height:1px;background:var(--border);margin:20px 0;}
+.key-note{font-size:12px;color:var(--ink3);margin-top:10px;font-weight:300;line-height:1.6;}
+
+/* ══════════ WELCOME ══════════ */
+.w-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,201,177,0.08);border:1px solid rgba(0,201,177,0.2);
+  border-radius:100px;padding:7px 18px;
+  font-size:11px;font-weight:600;letter-spacing:2px;
+  color:var(--teal);text-transform:uppercase;margin-bottom:32px;
+}
+.w-hero{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(44px,9vw,84px);
+  line-height:0.95;color:var(--ink);
+  margin-bottom:28px;letter-spacing:-2px;
+}
+.w-hero .accent{
+  color:transparent;
+  -webkit-text-stroke:1.5px var(--amber);
+}
+.w-hero .accent2{color:var(--teal);}
+.w-body{
+  font-size:17px;color:var(--ink2);
+  font-weight:300;max-width:540px;
+  margin-bottom:12px;line-height:1.75;
+}
+.w-trust{
+  font-size:12px;color:var(--ink3);
+  margin-bottom:44px;display:flex;align-items:center;gap:10px;
+}
+.w-trust::before{content:'';width:28px;height:1px;background:var(--ink3);}
+
+/* ── SCOPE GRID ── */
+.scope-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;margin-bottom:40px;
+}
+@media(max-width:500px){.scope-grid{grid-template-columns:repeat(2,1fr);}}
+.scope-pill{
+  background:var(--night2);
+  border:1px solid var(--border);
+  border-radius:10px;padding:14px 10px;
+  text-align:center;transition:var(--t);
+}
+.scope-pill:hover{border-color:rgba(240,165,0,0.3);background:rgba(240,165,0,0.04);}
+.scope-ico{font-size:20px;margin-bottom:5px;}
+.scope-lbl{font-size:11px;font-weight:500;color:var(--ink2);}
+
+.cta-btn{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  width:100%;max-width:440px;
+  background:linear-gradient(135deg,var(--amber),#e08800);
+  color:var(--night);border:none;border-radius:var(--r);
+  padding:18px 32px;
+  font-family:'DM Sans',sans-serif;
+  font-size:15px;font-weight:700;
+  cursor:pointer;transition:var(--t);
+  letter-spacing:0.5px;
+  -webkit-tap-highlight-color:transparent;
+  box-shadow:0 8px 32px rgba(240,165,0,0.25);
+}
+.cta-btn:active{transform:scale(0.98);box-shadow:0 4px 16px rgba(240,165,0,0.2);}
+.cta-btn svg{width:18px;height:18px;flex-shrink:0;}
+
+/* ══════════ STEP LAYOUT ══════════ */
+.dots-wrap{display:flex;align-items:center;gap:5px;margin-bottom:36px;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--border2);transition:var(--t);}
+.dot.done{background:var(--green);}
+.dot.now{background:var(--amber);width:22px;border-radius:4px;}
+
+.s-eye{
+  font-size:11px;font-weight:600;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--amber);margin-bottom:8px;
+}
+.s-title{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(26px,5vw,44px);
+  color:var(--ink);line-height:1.1;margin-bottom:8px;
+}
+.s-sub{font-size:14px;color:var(--ink2);margin-bottom:28px;font-weight:300;max-width:500px;}
+.multi-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(0,201,177,0.07);
+  border:1px solid rgba(0,201,177,0.18);
+  border-radius:100px;padding:5px 14px;
+  font-size:12px;font-weight:500;color:var(--teal);
+  margin-bottom:16px;
+}
+
+/* ── OPTION CARDS ── */
+.opt-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;margin-bottom:24px;
+}
+@media(min-width:560px){.opt-grid{grid-template-columns:repeat(auto-fill,minmax(195px,1fr));}}
+.opt{
+  position:relative;cursor:pointer;
+  background:var(--night2);
+  border:1.5px solid var(--border);
+  border-radius:var(--r);
+  padding:18px 14px 16px;
+  transition:var(--t);user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.opt:active,.opt:hover{border-color:rgba(240,165,0,0.35);background:rgba(240,165,0,0.04);}
+.opt.sel{
+  border-color:var(--amber);
+  background:rgba(240,165,0,0.07);
+  box-shadow:0 0 0 3px rgba(240,165,0,0.12),inset 0 0 20px rgba(240,165,0,0.03);
+}
+.opt-tick{
+  position:absolute;top:10px;right:10px;
+  width:20px;height:20px;border-radius:50%;
+  border:1.5px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;color:transparent;
+  transition:var(--t);
+}
+.opt.sel .opt-tick{background:var(--amber);border-color:var(--amber);color:var(--night);}
+.opt-ico{font-size:26px;margin-bottom:10px;display:block;}
+.opt-lbl{font-size:13px;font-weight:600;color:var(--ink);line-height:1.3;padding-right:22px;}
+.opt-desc{font-size:11px;color:var(--ink3);margin-top:3px;font-weight:300;}
+
+/* ── OTHER PANEL ── */
+.other-panel{display:none;margin-top:10px;animation:fadeUp 0.3s ease both;}
+.other-panel.vis{display:block;}
+
+/* ── INPUTS ── */
+.f-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--ink3);margin-bottom:7px;}
+input[type=text],input[type=email],textarea,select{
+  width:100%;
+  background:var(--night2);
+  border:1.5px solid var(--border);
+  border-radius:var(--r);color:var(--ink);
+  font-family:'DM Sans',sans-serif;font-size:15px;
+  padding:13px 16px;outline:none;
+  transition:var(--t);resize:vertical;
+}
+input::placeholder,textarea::placeholder{color:var(--ink3);}
+input:focus,textarea:focus{
+  border-color:var(--amber);
+  box-shadow:0 0 0 3px rgba(240,165,0,0.1);
+  background:rgba(240,165,0,0.03);
+}
+textarea{min-height:88px;}
+.f-group{margin-bottom:16px;}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:480px){.f-row{grid-template-columns:1fr;}}
+
+/* ── SPEC TAGS ── */
+.spec-box{
+  background:rgba(0,201,177,0.05);
+  border:1px solid rgba(0,201,177,0.18);
+  border-radius:var(--r);padding:20px;margin-bottom:20px;
+}
+.spec-box-ttl{
+  font-size:10px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--teal);margin-bottom:14px;
+}
+.spec-tags{display:flex;flex-wrap:wrap;gap:8px;}
+.spec-tag{
+  background:var(--night2);border:1.5px solid var(--border);
+  border-radius:100px;padding:7px 16px;
+  font-size:12px;font-weight:500;color:var(--ink2);
+  cursor:pointer;transition:var(--t);
+  -webkit-tap-highlight-color:transparent;
+}
+.spec-tag:active,.spec-tag:hover{border-color:rgba(0,201,177,0.4);color:var(--teal);}
+.spec-tag.sel-spec{
+  border-color:var(--teal);
+  background:rgba(0,201,177,0.08);
+  color:var(--teal);font-weight:600;
+}
+
+/* ── BUTTONS ── */
+.nav-row{
+  display:flex;align-items:center;
+  justify-content:space-between;margin-top:40px;gap:12px;
+}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  gap:8px;padding:13px 28px;border-radius:100px;
+  font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;
+  cursor:pointer;border:none;transition:var(--t);
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-p{
+  background:linear-gradient(135deg,var(--amber),#e08800);
+  color:var(--night);
+  box-shadow:0 4px 20px rgba(240,165,0,0.2);
+}
+.btn-p:active{transform:scale(0.97);}
+.btn-g{
+  background:transparent;color:var(--ink2);
+  border:1.5px solid var(--border2);
+}
+.btn-g:active{border-color:var(--ink3);color:var(--ink);}
+.btn-t{
+  background:linear-gradient(135deg,var(--teal),#009985);
+  color:var(--night);
+  box-shadow:0 4px 20px rgba(0,201,177,0.2);
+}
+.btn-full{width:100%;border-radius:var(--r);padding:16px;}
+
+/* ── UPLOAD ── */
+.upload-zone{
+  border:2px dashed var(--border2);border-radius:var(--r);
+  padding:36px 16px;text-align:center;cursor:pointer;
+  transition:var(--t);background:var(--night2);
+  position:relative;
+}
+.upload-zone.drag-over{border-color:var(--amber);background:rgba(240,165,0,0.04);}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.upload-zone-ico{font-size:32px;margin-bottom:8px;}
+.upload-zone-txt{font-size:13px;color:var(--ink3);}
+.upload-zone-txt strong{color:var(--amber);}
+.file-list{margin-top:12px;display:flex;flex-direction:column;gap:8px;}
+.file-item{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--night3);border-radius:8px;padding:9px 14px;font-size:12px;
+  color:var(--ink2);
+}
+.file-rm{cursor:pointer;color:var(--red);font-size:16px;padding:2px 4px;}
+
+/* ══════════ SUMMARY ══════════ */
+.sum-header{text-align:center;padding:8px 0 36px;}
+.sum-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,224,122,0.1);border:1px solid rgba(0,224,122,0.25);
+  border-radius:100px;padding:8px 20px;
+  font-size:12px;font-weight:600;color:var(--green);
+  margin-bottom:18px;
+}
+.sum-title{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(26px,5vw,38px);color:var(--ink);margin-bottom:6px;
+}
+.sum-sub{font-size:14px;color:var(--ink3);font-weight:300;}
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;}
+@media(max-width:480px){.sum-grid{grid-template-columns:1fr;}}
+.sum-card{
+  background:var(--night2);border:1px solid var(--border);
+  border-radius:var(--r);padding:16px 18px;
+}
+.sum-card-lbl{
+  font-size:9px;font-weight:700;text-transform:uppercase;
+  letter-spacing:2px;color:var(--ink3);margin-bottom:6px;
+}
+.sum-card-val{font-size:13px;font-weight:500;color:var(--ink);line-height:1.5;}
+
+/* ── AI BOX ── */
+.ai-box{
+  background:var(--night2);border:1px solid var(--border2);
+  border-radius:var(--r);padding:24px 22px;
+  margin-bottom:20px;
+  box-shadow:0 0 40px rgba(240,165,0,0.04);
+}
+.ai-box-hdr{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
+.ai-box-ico{
+  width:44px;height:44px;
+  background:linear-gradient(135deg,var(--amber),#e08800);
+  border-radius:10px;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;font-size:20px;
+}
+.ai-box-ttl{
+  font-family:'DM Serif Display',serif;
+  font-size:20px;color:var(--ink);
+}
+.ai-box-sub{font-size:12px;color:var(--ink3);font-weight:300;}
+.ai-loading{display:flex;align-items:center;gap:12px;color:var(--ink3);font-size:14px;padding:8px 0;}
+.spinner{
+  width:20px;height:20px;border-radius:50%;
+  border:2px solid var(--border2);border-top-color:var(--amber);
+  animation:spin 0.8s linear infinite;flex-shrink:0;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.ai-content{font-size:14px;color:var(--ink2);line-height:1.85;font-weight:300;}
+.ai-content h3{
+  font-family:'DM Serif Display',serif;font-size:17px;
+  color:var(--ink);margin:20px 0 7px;
+}
+.ai-content h3:first-child{margin-top:0;}
+.ai-content ul{margin:6px 0 14px 18px;}
+.ai-content li{margin-bottom:5px;}
+.ai-content strong{color:var(--ink);font-weight:600;}
+.ai-content .hbox{
+  background:rgba(240,165,0,0.07);
+  border-left:3px solid var(--amber);
+  padding:14px 18px;border-radius:0 10px 10px 0;
+  margin:14px 0;font-size:13px;
+}
+.ai-content .wbox{
+  background:rgba(255,90,90,0.07);
+  border-left:3px solid var(--red);
+  padding:14px 18px;border-radius:0 10px 10px 0;
+  margin:14px 0;font-size:13px;
+}
+.ai-content .tbox{
+  background:rgba(0,201,177,0.07);
+  border-left:3px solid var(--teal);
+  padding:14px 18px;border-radius:0 10px 10px 0;
+  margin:14px 0;font-size:13px;
+}
+
+/* ── NEUTRAL BOX ── */
+.neutral-box{
+  background:linear-gradient(135deg,rgba(240,165,0,0.05),rgba(0,201,177,0.05));
+  border:1px solid var(--border2);
+  border-radius:var(--r);padding:22px 20px;margin:20px 0;
+}
+.neutral-ttl{
+  font-size:10px;font-weight:700;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--amber);margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;
+}
+.neutral-body{font-size:13px;color:var(--ink2);font-weight:300;line-height:1.7;}
+.ask-btns{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
+.btn-ask{
+  background:var(--night3);border:1px solid var(--border2);
+  border-radius:10px;padding:13px 18px;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
+  cursor:pointer;color:var(--ink2);transition:var(--t);
+  text-align:left;-webkit-tap-highlight-color:transparent;
+  display:flex;align-items:center;gap:10px;
+}
+.btn-ask:active,.btn-ask:hover{border-color:rgba(240,165,0,0.3);color:var(--amber);}
+.neutral-note{
+  display:flex;align-items:flex-start;gap:10px;
+  background:rgba(0,224,122,0.06);
+  border:1px solid rgba(0,224,122,0.18);
+  border-radius:10px;padding:14px 16px;
+  margin-top:16px;font-size:12px;color:var(--ink2);line-height:1.6;
+}
+.neutral-note::before{content:'⚖️';font-size:16px;flex-shrink:0;margin-top:1px;}
+
+/* ══════════ DONE ══════════ */
+.done-wrap{text-align:center;padding:52px 0 32px;}
+.done-icon{font-size:60px;margin-bottom:22px;display:block;}
+.done-title{
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(30px,6vw,44px);
+  color:var(--ink);margin-bottom:12px;
+}
+.done-sub{
+  font-size:15px;color:var(--ink2);
+  font-weight:300;max-width:440px;
+  margin:0 auto 28px;line-height:1.7;
+}
+.ref-box{
+  display:inline-block;
+  background:linear-gradient(135deg,var(--amber),#e08800);
+  color:var(--night);
+  border-radius:var(--r);padding:16px 36px;
+  font-family:'Space Mono',monospace;
+  font-size:18px;font-weight:700;
+  letter-spacing:4px;margin-bottom:36px;
+  box-shadow:0 8px 32px rgba(240,165,0,0.3);
+}
+.done-btns{display:flex;flex-direction:column;gap:12px;max-width:320px;margin:0 auto;}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:28px;left:50%;
+  transform:translateX(-50%) translateY(16px);
+  background:var(--night2);color:var(--ink);
+  border:1px solid var(--border2);
+  padding:12px 24px;border-radius:100px;
+  font-size:13px;font-weight:500;opacity:0;
+  transition:all 0.3s ease;z-index:9999;
+  pointer-events:none;
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+  white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.err{background:rgba(255,90,90,0.15);border-color:rgba(255,90,90,0.3);color:var(--red);}
+</style>
+</head>
+<body>
+
+<div class="glow-orb g1"></div>
+<div class="glow-orb g2"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-wrap">
+    <!-- Premium SVG Logo -->
+    <svg class="logo-svg" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="44" height="44" rx="10" fill="#141720"/>
+      <rect x="0.5" y="0.5" width="43" height="43" rx="9.5" stroke="white" stroke-opacity="0.1"/>
+      <!-- Hexagon structure -->
+      <path d="M22 8L32 13.5V24.5L22 30L12 24.5V13.5L22 8Z" stroke="#f0a500" stroke-width="1.5" fill="none"/>
+      <!-- Inner diamond -->
+      <path d="M22 13L27 19L22 25L17 19L22 13Z" fill="#f0a500" opacity="0.15"/>
+      <path d="M22 13L27 19L22 25L17 19L22 13Z" stroke="#f0a500" stroke-width="1" fill="none"/>
+      <!-- Center dot -->
+      <circle cx="22" cy="19" r="2.5" fill="#f0a500"/>
+      <!-- Bottom accent -->
+      <path d="M15 29H29" stroke="#00c9b1" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M18 32H26" stroke="#00c9b1" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+      <path d="M20 35H24" stroke="#00c9b1" stroke-width="0.75" stroke-linecap="round" opacity="0.35"/>
+    </svg>
+
+    <div class="logo-wordmark">
+      <div class="logo-name">CCENA</div>
+      <div class="logo-full">Construction Chemicals Expert Neutral Advice</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <div class="status-pill"><div class="status-dot"></div>Vendor-Neutral</div>
+    <div id="hdr-step"></div>
+  </div>
+</header>
+
+<div class="prog-rail"><div class="prog-fill" id="prog"></div></div>
+
+<div id="app"><main>
+
+<!-- ══ API KEY ══ -->
+<div class="screen" id="s-key">
+  <div class="key-screen-wrap">
+    <div class="key-eyebrow">⚙️ One-Time Setup Required</div>
+    <div class="key-hero">Power Up<br>the <span>AI Engine.</span></div>
+    <p class="key-body">CCENA uses Anthropic's Claude AI to generate expert, vendor-neutral construction chemical advice. You need a free API key — takes 2 minutes.</p>
+    <div class="key-card">
+      <div class="key-card-ttl">Step 1 — Get your free API key</div>
+      <ol class="key-steps">
+        <li>Go to <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></li>
+        <li>Sign up or log in (free account)</li>
+        <li>Click <strong>API Keys</strong> → <strong>Create Key</strong></li>
+        <li>Copy the key — starts with <code style="background:rgba(255,255,255,0.07);padding:2px 7px;border-radius:4px;font-size:11px;font-family:'Space Mono',monospace">sk-ant-...</code></li>
+      </ol>
+      <div class="key-divider"></div>
+      <div class="key-card-ttl">Step 2 — Paste it here</div>
+      <input type="text" id="key-input" placeholder="sk-ant-api03-..." style="font-family:'Space Mono',monospace;font-size:13px;letter-spacing:0.3px"/>
+      <div class="key-note">🔒 Your key stays in this browser session only. Sent directly to Anthropic — never stored or shared.</div>
+    </div>
+    <button class="cta-btn" style="max-width:360px" onclick="applyKey()">
+      Activate &amp; Start Consultation
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ══ WELCOME ══ -->
+<div class="screen" id="s0">
+  <div class="w-eyebrow">🛡️ Independent · Unbiased · Expert</div>
+  <div class="w-hero">
+    THE RIGHT<br>
+    <span class="accent">SOLUTION.</span><br>
+    NOT THE<br>
+    <span class="accent2">EASIEST SALE.</span>
+  </div>
+  <p class="w-body">
+    Suppliers have interests. CCENA doesn't. We analyse your project — substrate, exposure, stage, and standards — then recommend the right chemistry and system. No brand pushing. No hidden agendas. Just engineering truth.
+  </p>
+  <div class="w-trust">No supplier affiliations · No commissions · No shortcuts</div>
+  <div class="scope-grid">
+    <div class="scope-pill"><div class="scope-ico">💧</div><div class="scope-lbl">Waterproofing</div></div>
+    <div class="scope-pill"><div class="scope-ico">🎨</div><div class="scope-lbl">Coatings</div></div>
+    <div class="scope-pill"><div class="scope-ico">🏗️</div><div class="scope-lbl">Flooring</div></div>
+    <div class="scope-pill"><div class="scope-ico">🔧</div><div class="scope-lbl">Concrete Repair</div></div>
+    <div class="scope-pill"><div class="scope-ico">🏠</div><div class="scope-lbl">Roofing</div></div>
+    <div class="scope-pill"><div class="scope-ico">🚿</div><div class="scope-lbl">Wet Areas</div></div>
+    <div class="scope-pill"><div class="scope-ico">🔗</div><div class="scope-lbl">Adhesives</div></div>
+    <div class="scope-pill"><div class="scope-ico">〰️</div><div class="scope-lbl">Sealants</div></div>
+  </div>
+  <button class="cta-btn" onclick="goStep(1)">
+    Start Free Consultation
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </button>
+</div>
+
+<!-- ══ S1: ROLE ══ -->
+<div class="screen" id="s1">
+  <div class="dots-wrap" id="d1"></div>
+  <div class="s-eye">Step 1 of 8 — Your Role</div>
+  <div class="s-title">What is your role?</div>
+  <div class="s-sub">This calibrates the depth and type of guidance.</div>
+  <div class="opt-grid" id="g-role">
+    <div class="opt" onclick="pick(this,'role')"><div class="opt-tick">✓</div><span class="opt-ico">🏛️</span><div class="opt-lbl">Consultant / Engineer</div><div class="opt-desc">Specifying systems</div></div>
+    <div class="opt" onclick="pick(this,'role')"><div class="opt-tick">✓</div><span class="opt-ico">👷</span><div class="opt-lbl">Contractor / Applicator</div><div class="opt-desc">Executing site works</div></div>
+    <div class="opt" onclick="pick(this,'role')"><div class="opt-tick">✓</div><span class="opt-ico">🏢</span><div class="opt-lbl">Client / Developer</div><div class="opt-desc">Owning the asset</div></div>
+    <div class="opt" onclick="pick(this,'role')"><div class="opt-tick">✓</div><span class="opt-ico">🔍</span><div class="opt-lbl">End User / FM</div><div class="opt-desc">Operating the building</div></div>
+    <div class="opt" onclick="pick(this,'role')"><div class="opt-tick">✓</div><span class="opt-ico">🛒</span><div class="opt-lbl">Procurement / QS</div><div class="opt-desc">Sourcing &amp; cost</div></div>
+  </div>
+  <div class="nav-row">
+    <button class="btn btn-g" onclick="goStep(0)">← Back</button>
+    <button class="btn btn-p" onclick="nextStep(1,'role',false)">Continue →</button>
+  </div>
+</div>
+
+<!-- ══ S2: SCOPE ══ -->
+<div class="screen" id="s2">
+  <div class="dots-wrap" id="d2"></div>
+  <div class="s-eye">Step 2 of 8 — Scope</div>
+  <div class="s-title">What scope of work?</div>
+  <div class="s-sub">Select the primary category you need advice on.</div>
+  <div class="opt-grid" id="g-scope">
+    <div class="opt" onclick="pick(this,'scope')"><div class="opt-tick">✓</div><span class="opt-ico">💧</span><div class="opt-lbl">Waterproofing — Below Ground</div><div class="opt-desc">Basements, foundations, retaining walls</div></div>
+    <div class="opt" onclick="pick(this,'scope')"><div class="opt-tick">✓</div><span class="opt-ico">🏠</span><div class="opt-lbl">Roofing &amp; Podium Decks</div><div class="opt-desc">Flat roofs, terraces, bridge decks</div></div>
+    <div class="opt" onclick="pick(this,'scope')"><div class="opt-tick">✓</div><span class="opt-ico">🚿</span><div class="opt-lbl">Wet Areas &amp; Bathrooms</div><div class="opt-desc">Showers, pools, plant rooms</div></div>
+    <div class="opt" onclick="pick(this,'scope')"><div class="opt-tick">✓</div><span class="opt-ico">🏗️</span><div class="opt-lbl">Flooring Systems</div><div class="opt-desc">Industrial, commercial, decorative</div></div>
+    <div class="opt" onclick="pick(this,'scope')"><div class="opt-tick">✓</div><span class="opt-ico">🎨</span><div class="opt-lbl">Protective Coatings</div><div class="opt-desc">Concrete, steel, facades</div></div>
+    <div class="opt" onclick="pick(this,'scope')"><div class="opt-tick">✓</div><span class="opt-ico">🔧</span><div class="opt-lbl">Concrete Repair &amp; Strengthening</div><div class="opt-desc">Spalling, cracks, carbonation</div></div>
+    <div class="opt" onclick="pick(this,'scope')"><div class="opt-tick">✓</div><span class="opt-ico">🔗</span><div class="opt-lbl">Adhesives &amp; Tile Fixing</div><div class="opt-desc">Tiles, stone, cladding, screeds</div></div>
+    <div class="opt" onclick="pick(this,'scope')"><div class="opt-tick">✓</div><span class="opt-ico">〰️</span><div class="opt-lbl">Joint Sealants &amp; Expansion</div><div class="opt-desc">Movement, construction joints</div></div>
+  </div>
+  <div class="nav-row">
+    <button class="btn btn-g" onclick="goStep(1)">← Back</button>
+    <button class="btn btn-p" onclick="nextStep(2,'scope',false)">Continue →</button>
+  </div>
+</div>
+
+<!-- ══ S3: STAGE ══ -->
+<div class="screen" id="s3">
+  <div class="dots-wrap" id="d3"></div>
+  <div class="s-eye">Step 3 of 8 — Project Stage</div>
+  <div class="s-title">What is the project stage?</div>
+  <div class="s-sub">This directly affects chemistry and application method.</div>
+  <div class="opt-grid" id="g-stage">
+    <div class="opt" onclick="pick(this,'stage')"><div class="opt-tick">✓</div><span class="opt-ico">🆕</span><div class="opt-lbl">New Construction</div><div class="opt-desc">First-time, new substrate</div></div>
+    <div class="opt" onclick="pick(this,'stage')"><div class="opt-tick">✓</div><span class="opt-ico">🔄</span><div class="opt-lbl">Refurbishment / Overlay</div><div class="opt-desc">Over existing system</div></div>
+    <div class="opt" onclick="pick(this,'stage')"><div class="opt-tick">✓</div><span class="opt-ico">⚠️</span><div class="opt-lbl">Remediation / Repair</div><div class="opt-desc">Fixing failures or defects</div></div>
+    <div class="opt" onclick="pick(this,'stage')"><div class="opt-tick">✓</div><span class="opt-ico">🏃</span><div class="opt-lbl">Emergency / Reactive</div><div class="opt-desc">Active leak, urgent failure</div></div>
+  </div>
+  <div class="nav-row">
+    <button class="btn btn-g" onclick="goStep(2)">← Back</button>
+    <button class="btn btn-p" onclick="nextStep(3,'stage',false)">Continue →</button>
+  </div>
+</div>
+
+<!-- ══ S4: SUBSTRATE ══ -->
+<div class="screen" id="s4">
+  <div class="dots-wrap" id="d4"></div>
+  <div class="s-eye">Step 4 of 8 — Substrate</div>
+  <div class="s-title">What is the substrate?</div>
+  <div class="s-sub">Select all surfaces that need treatment.</div>
+  <div class="multi-tag">⚡ Multiple selections allowed</div>
+  <div class="opt-grid" id="g-substrate">
+    <div class="opt" onclick="pickM(this,'substrate')"><div class="opt-tick">✓</div><span class="opt-ico">🏛️</span><div class="opt-lbl">Concrete</div><div class="opt-desc">RC, precast, blockwork</div></div>
+    <div class="opt" onclick="pickM(this,'substrate')"><div class="opt-tick">✓</div><span class="opt-ico">🧱</span><div class="opt-lbl">Masonry / Brick</div><div class="opt-desc">Brick, block, render</div></div>
+    <div class="opt" onclick="pickM(this,'substrate')"><div class="opt-tick">✓</div><span class="opt-ico">⚙️</span><div class="opt-lbl">Steel / Metal</div><div class="opt-desc">Structural, tanks, pipes</div></div>
+    <div class="opt" onclick="pickM(this,'substrate')"><div class="opt-tick">✓</div><span class="opt-ico">🪟</span><div class="opt-lbl">Screed / Mortar</div><div class="opt-desc">Sand-cement, anhydrite</div></div>
+    <div class="opt" onclick="pickM(this,'substrate')"><div class="opt-tick">✓</div><span class="opt-ico">🌲</span><div class="opt-lbl">Timber / Plywood</div><div class="opt-desc">Softwood, hardwood, OSB</div></div>
+    <div class="opt" onclick="pickM(this,'substrate')"><div class="opt-tick">✓</div><span class="opt-ico">🔵</span><div class="opt-lbl">Tiles / Stone</div><div class="opt-desc">Ceramic, porcelain, natural</div></div>
+    <div class="opt other-trigger" onclick="pickM(this,'substrate','op-sub')"><div class="opt-tick">✓</div><span class="opt-ico">✏️</span><div class="opt-lbl">Other</div><div class="opt-desc">Specify below</div></div>
+  </div>
+  <div class="other-panel" id="op-sub">
+    <div class="f-lbl">Describe the substrate</div>
+    <textarea placeholder="e.g. Cast iron, PVC liner, bitumen felt…" id="op-sub-txt"></textarea>
+  </div>
+  <div class="nav-row">
+    <button class="btn btn-g" onclick="goStep(3)">← Back</button>
+    <button class="btn btn-p" onclick="nextStep(4,'substrate',true)">Continue →</button>
+  </div>
+</div>
+
+<!-- ══ S5: EXPOSURE ══ -->
+<div class="screen" id="s5">
+  <div class="dots-wrap" id="d5"></div>
+  <div class="s-eye">Step 5 of 8 — Exposure</div>
+  <div class="s-title">Exposure conditions?</div>
+  <div class="s-sub">We size the system to the real worst-case. Select all that apply.</div>
+  <div class="multi-tag">⚡ Select all that apply</div>
+  <div class="opt-grid" id="g-exposure">
+    <div class="opt" onclick="pickM(this,'exposure')"><div class="opt-tick">✓</div><span class="opt-ico">🌤️</span><div class="opt-lbl">Interior — Dry</div><div class="opt-desc">Low humidity, stable</div></div>
+    <div class="opt" onclick="pickM(this,'exposure')"><div class="opt-tick">✓</div><span class="opt-ico">💧</span><div class="opt-lbl">Interior — Wet / Humid</div><div class="opt-desc">Wet rooms, plant areas</div></div>
+    <div class="opt" onclick="pickM(this,'exposure')"><div class="opt-tick">✓</div><span class="opt-ico">☀️</span><div class="opt-lbl">Exterior — UV Exposed</div><div class="opt-desc">Facades, roofs, balconies</div></div>
+    <div class="opt" onclick="pickM(this,'exposure')"><div class="opt-tick">✓</div><span class="opt-ico">🌊</span><div class="opt-lbl">Submerged / Water Contact</div><div class="opt-desc">Pools, tanks, water features</div></div>
+    <div class="opt" onclick="pickM(this,'exposure')"><div class="opt-tick">✓</div><span class="opt-ico">⬇️</span><div class="opt-lbl">Below Grade / Hydrostatic</div><div class="opt-desc">Basement, retaining wall</div></div>
+    <div class="opt" onclick="pickM(this,'exposure')"><div class="opt-tick">✓</div><span class="opt-ico">🧪</span><div class="opt-lbl">Chemical Exposure</div><div class="opt-desc">Acids, alkalis, fuels</div></div>
+    <div class="opt" onclick="pickM(this,'exposure')"><div class="opt-tick">✓</div><span class="opt-ico">🚗</span><div class="opt-lbl">Trafficked / Mechanical</div><div class="opt-desc">Foot, forklift, vehicles</div></div>
+    <div class="opt" onclick="pickM(this,'exposure')"><div class="opt-tick">✓</div><span class="opt-ico">🌡️</span><div class="opt-lbl">Thermal Cycling / Extreme</div><div class="opt-desc">Freeze-thaw, heat, steam</div></div>
+    <div class="opt" onclick="pickM(this,'exposure')"><div class="opt-tick">✓</div><span class="opt-ico">🌊</span><div class="opt-lbl">Marine / Coastal</div><div class="opt-desc">Chloride, salt spray</div></div>
+  </div>
+  <div class="nav-row">
+    <button class="btn btn-g" onclick="goStep(4)">← Back</button>
+    <button class="btn btn-p" onclick="nextStep(5,'exposure',true)">Continue →</button>
+  </div>
+</div>
+
+<!-- ══ S6: STANDARDS ══ -->
+<div class="screen" id="s6">
+  <div class="dots-wrap" id="d6"></div>
+  <div class="s-eye">Step 6 of 8 — Standards</div>
+  <div class="s-title">Any standards to comply with?</div>
+  <div class="s-sub">Optional — tap to select. Leave blank if not applicable.</div>
+  <div class="spec-box">
+    <div class="spec-box-ttl">⚙️ International &amp; Regional Standards</div>
+    <div class="spec-tags" id="spec-tags">
+      <div class="spec-tag" onclick="toggleSpec(this)">BS 8102 (Below-ground WP)</div>
+      <div class="spec-tag" onclick="toggleSpec(this)">BS EN 1504 (Concrete Repair)</div>
+      <div class="spec-tag" onclick="toggleSpec(this)">ETAG 005 (Liquid WP)</div>
+      <div class="spec-tag" onclick="toggleSpec(this)">BS 6213 (Sealants)</div>
+      <div class="spec-tag" onclick="toggleSpec(this)">BS EN 13813 (Screeds)</div>
+      <div class="spec-tag" onclick="toggleSpec(this)">ISO 12944 (Anti-corrosion)</div>
+      <div class="spec-tag" onclick="toggleSpec(this)">SSPC / NACE</div>
+      <div class="spec-tag" onclick="toggleSpec(this)">ASTM C881 (Epoxy Adhesive)</div>
+      <div class="spec-tag" onclick="toggleSpec(this)">BS 5385 (Wall &amp; Floor Tiling)</div>
+      <div class="spec-tag" onclick="toggleSpec(this)">DEWA / Civil Defence (UAE)</div>
+      <div class="spec-tag" onclick="toggleSpec(this)">Saudi Aramco Specs</div>
+      <div class="spec-tag" onclick="toggleSpec(this)">ACI 318 / 350</div>
+      <div class="spec-tag" onclick="toggleSpec(this)">NBS Specification</div>
+    </div>
+  </div>
+  <div class="f-group">
+    <div class="f-lbl">Custom specification reference (optional)</div>
+    <input type="text" id="custom-spec" placeholder="e.g. ADNOC spec No. 23-MECH-001, Client Spec Rev B…"/>
+  </div>
+  <div class="nav-row">
+    <button class="btn btn-g" onclick="goStep(5)">← Back</button>
+    <button class="btn btn-p" onclick="saveStep6()">Continue →</button>
+  </div>
+</div>
+
+<!-- ══ S7: DETAILS ══ -->
+<div class="screen" id="s7">
+  <div class="dots-wrap" id="d7"></div>
+  <div class="s-eye">Step 7 of 8 — Project Detail</div>
+  <div class="s-title">A few final details.</div>
+  <div class="s-sub">Helps us size and prioritise your recommendation correctly.</div>
+  <div class="f-row">
+    <div class="f-group"><div class="f-lbl">Approximate area (m²)</div><input type="text" id="area" placeholder="e.g. 500 m²"/></div>
+    <div class="f-group"><div class="f-lbl">Location / Climate</div><input type="text" id="location" placeholder="e.g. Dubai, UAE — Humid coastal"/></div>
+  </div>
+  <div class="f-group">
+    <div class="f-lbl">Most important performance factor *</div>
+    <div class="opt-grid" id="g-priority">
+      <div class="opt" onclick="pick(this,'priority')"><div class="opt-tick">✓</div><span class="opt-ico">🛡️</span><div class="opt-lbl">Long-term Durability</div></div>
+      <div class="opt" onclick="pick(this,'priority')"><div class="opt-tick">✓</div><span class="opt-ico">⚡</span><div class="opt-lbl">Speed / Fast Return</div></div>
+      <div class="opt" onclick="pick(this,'priority')"><div class="opt-tick">✓</div><span class="opt-ico">💰</span><div class="opt-lbl">Cost Optimisation</div></div>
+      <div class="opt" onclick="pick(this,'priority')"><div class="opt-tick">✓</div><span class="opt-ico">🔒</span><div class="opt-lbl">Compliance / Warranty</div></div>
+      <div class="opt" onclick="pick(this,'priority')"><div class="opt-tick">✓</div><span class="opt-ico">🌱</span><div class="opt-lbl">Low VOC / Sustainability</div></div>
+    </div>
+  </div>
+  <div class="f-group" style="margin-top:6px">
+    <div class="f-lbl">Additional constraints or context (optional)</div>
+    <textarea id="notes" placeholder="e.g. Occupied building, potable water contact, max 24hr outage, active movement expected…"></textarea>
+  </div>
+  <div class="nav-row">
+    <button class="btn btn-g" onclick="goStep(6)">← Back</button>
+    <button class="btn btn-p" onclick="nextStep(7,'priority',false)">Continue →</button>
+  </div>
+</div>
+
+<!-- ══ S8: CONTACT ══ -->
+<div class="screen" id="s8">
+  <div class="dots-wrap" id="d8"></div>
+  <div class="s-eye">Step 8 of 8 — Your Details</div>
+  <div class="s-title">Almost there.</div>
+  <div class="s-sub">Who should we address this recommendation to? We never share your data.</div>
+  <div class="f-row">
+    <div class="f-group"><div class="f-lbl">Full Name</div><input type="text" id="cname" placeholder="Ahmed Al-Rashid"/></div>
+    <div class="f-group"><div class="f-lbl">Company</div><input type="text" id="company" placeholder="Al Futtaim Engineering"/></div>
+  </div>
+  <div class="f-row">
+    <div class="f-group"><div class="f-lbl">Email Address *</div><input type="email" id="email" placeholder="you@company.com"/></div>
+    <div class="f-group"><div class="f-lbl">Project Name</div><input type="text" id="projname" placeholder="Mall of Emirates Expansion"/></div>
+  </div>
+  <div class="f-group">
+    <div class="f-lbl">Upload documents (optional)</div>
+    <div class="upload-zone" id="upzone">
+      <input type="file" multiple onchange="handleFiles(this.files)" accept=".pdf,.dwg,.doc,.docx,.jpg,.png"/>
+      <div class="upload-zone-ico">📎</div>
+      <div class="upload-zone-txt"><strong>Tap to browse</strong> or drag files<br><span style="font-size:11px">Drawings, specs, site photos accepted</span></div>
+      <div class="file-list" id="flist"></div>
+    </div>
+  </div>
+  <div class="nav-row">
+    <button class="btn btn-g" onclick="goStep(7)">← Back</button>
+    <button class="btn btn-t btn-full" onclick="goSummary()" style="flex:1">Generate Expert Advice →</button>
+  </div>
+</div>
+
+<!-- ══ SUMMARY ══ -->
+<div class="screen" id="s-sum">
+  <div class="sum-header">
+    <div class="sum-badge">✓ Analysis Complete</div>
+    <div class="sum-title">Your Expert Recommendation</div>
+    <div class="sum-sub">Vendor-neutral · Performance-first · CCENA</div>
+  </div>
+  <div class="sum-grid" id="sum-grid"></div>
+  <div class="ai-box">
+    <div class="ai-box-hdr">
+      <div class="ai-box-ico">🏗️</div>
+      <div>
+        <div class="ai-box-ttl">Expert Recommendation</div>
+        <div class="ai-box-sub">System, chemistry &amp; quality requirements — no brand bias</div>
+      </div>
+    </div>
+    <div id="ai-out"><div class="ai-loading"><div class="spinner"></div>Analysing your project parameters…</div></div>
+  </div>
+  <div class="neutral-box">
+    <div class="neutral-ttl">⚖️ Our Neutrality Commitment</div>
+    <p class="neutral-body">CCENA recommends <strong>systems and chemistries</strong> — never specific brands. Need indicative product names or a specification clause for tendering? Use the options below. All product suggestions are reference-only; equivalents from any reputable manufacturer meeting the spec are equally acceptable.</p>
+    <div class="ask-btns">
+      <button class="btn-ask" onclick="askProducts()"><span>🏷️</span> Request Indicative Product Names</button>
+      <button class="btn-ask" onclick="askSpec()"><span>📋</span> Request Draft Specification Clause</button>
+      <button class="btn-ask" onclick="askStandards()"><span>📐</span> Show Applicable Standards Detail</button>
+    </div>
+  </div>
+  <div id="extra-out"></div>
+  <div class="nav-row">
+    <button class="btn btn-g" onclick="goStep(8)">← Edit Inputs</button>
+    <button class="btn btn-p" onclick="submitFinal()">Submit &amp; Download Report →</button>
+  </div>
+</div>
+
+<!-- ══ DONE ══ -->
+<div class="screen" id="s-done">
+  <div class="done-wrap">
+    <span class="done-icon">🏛️</span>
+    <div class="done-title">Advice Delivered.</div>
+    <p class="done-sub">Your CCENA consultation report is ready. Save your reference number:</p>
+    <div class="ref-box" id="refcode">CC-——</div>
+    <div class="done-btns">
+      <button class="btn btn-p btn-full" onclick="dlReport()">⬇ Download Report</button>
+      <button class="btn btn-g btn-full" onclick="resetAll()">Start New Consultation</button>
+    </div>
+  </div>
+</div>
+
+</main></div>
+<div class="toast" id="toast"></div>
+
+<script>
+// API key stored securely in Netlify environment - never exposed to browser
+const S = {sel:{},specs:[],files:[],cname:'',company:'',email:'',projname:'',area:'',location:'',notes:'',customSpec:'',aiRec:''};
+const TOTAL = 8;
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById(id);
+  if(el) el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function goStep(n){
+  updateHdr(n);
+  if(n===0){showScreen('s0');return;}
+  showScreen('s'+n);
+  buildDots(n);
+  document.getElementById('prog').style.width=Math.round((n/TOTAL)*100)+'%';
+}
+
+function updateHdr(n){
+  document.getElementById('hdr-step').textContent=(n>0&&n<=TOTAL)?'Step '+n+' of '+TOTAL:'';
+}
+
+function buildDots(step){
+  const el=document.getElementById('d'+step);
+  if(!el)return;
+  let h='';
+  for(let i=1;i<=TOTAL;i++) h+='<div class="dot '+(i<step?'done':i===step?'now':'')+'"></div>';
+  el.innerHTML=h;
+}
+
+function applyKey(){
+  const k=document.getElementById('key-input').value.trim();
+  if(!k.startsWith('sk-')){showToast('Please enter a valid key starting with sk-',true);return;}
+  
+  showScreen('s0');
+  document.getElementById('prog').style.width='0%';
+  document.getElementById('hdr-step').textContent='';
+}
+
+window.addEventListener('load',()=>showScreen('s0'));
+
+function pick(card,key){
+  card.closest('.opt-grid').querySelectorAll('.opt').forEach(c=>c.classList.remove('sel'));
+  card.classList.add('sel');
+  S.sel[key]=[card.querySelector('.opt-lbl').textContent.trim()];
+}
+
+function pickM(card,key,otherId){
+  card.classList.toggle('sel');
+  S.sel[key]=Array.from(card.closest('.opt-grid').querySelectorAll('.opt.sel')).map(c=>c.querySelector('.opt-lbl').textContent.trim());
+  if(otherId){
+    const p=document.getElementById(otherId);
+    if(p) p.classList.toggle('vis',card.classList.contains('sel')&&card.classList.contains('other-trigger'));
+  }
+}
+
+function toggleSpec(el){
+  el.classList.toggle('sel-spec');
+  S.specs=Array.from(document.querySelectorAll('.spec-tag.sel-spec')).map(e=>e.textContent.trim());
+}
+
+function nextStep(cur,key,isMulti){
+  if(!(S.sel[key]&&S.sel[key].length)){showToast('Please make a selection to continue',true);return;}
+  if(cur===7){
+    S.area=document.getElementById('area').value.trim();
+    S.location=document.getElementById('location').value.trim();
+    S.notes=document.getElementById('notes').value.trim();
+  }
+  goStep(cur+1);
+}
+
+function saveStep6(){
+  S.customSpec=document.getElementById('custom-spec').value.trim();
+  goStep(7);
+}
+
+function handleFiles(files){
+  Array.from(files).forEach(f=>{if(!S.files.find(x=>x.name===f.name))S.files.push(f);});
+  renderFiles();
+}
+function renderFiles(){
+  document.getElementById('flist').innerHTML=S.files.map((f,i)=>
+    '<div class="file-item"><span>📄 '+f.name+'</span><span style="display:flex;gap:8px;align-items:center"><span style="font-size:11px;color:var(--ink3)">'+(f.size/1024).toFixed(0)+' KB</span><span class="file-rm" onclick="rmFile('+i+')">✕</span></span></div>'
+  ).join('');
+}
+function rmFile(i){S.files.splice(i,1);renderFiles();}
+const uz=document.getElementById('upzone');
+uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('drag-over');});
+uz.addEventListener('dragleave',()=>uz.classList.remove('drag-over'));
+uz.addEventListener('drop',e=>{e.preventDefault();uz.classList.remove('drag-over');handleFiles(e.dataTransfer.files);});
+
+function goSummary(){
+  S.cname=document.getElementById('cname').value.trim();
+  S.company=document.getElementById('company').value.trim();
+  S.email=document.getElementById('email').value.trim();
+  S.projname=document.getElementById('projname').value.trim();
+  if(!S.email){showToast('Please enter your email address',true);return;}
+  buildSummary();
+  document.getElementById('prog').style.width='100%';
+  document.getElementById('hdr-step').textContent='Review';
+  showScreen('s-sum');
+  callAI('ai-out',null);
+}
+
+function buildSummary(){
+  const rows=[
+    ['Contact',S.cname+(S.company?' · '+S.company:'')],
+    ['Email',S.email],['Project',S.projname],
+    ['Area / Location',[S.area,S.location].filter(Boolean).join(' · ')],
+    ['Role',(S.sel.role||[]).join(', ')],['Scope',(S.sel.scope||[]).join(', ')],
+    ['Stage',(S.sel.stage||[]).join(', ')],['Substrate',(S.sel.substrate||[]).join(', ')],
+    ['Exposure',(S.sel.exposure||[]).join(', ')],['Priority',(S.sel.priority||[]).join(', ')],
+    ['Standards',[...S.specs,S.customSpec].filter(Boolean).join(', ')||'None specified']
+  ];
+  document.getElementById('sum-grid').innerHTML=rows
+    .filter(([,v])=>v&&v.trim())
+    .map(([l,v])=>'<div class="sum-card"><div class="sum-card-lbl">'+l+'</div><div class="sum-card-val">'+v+'</div></div>')
+    .join('');
+}
+
+const SYS='You are CCENA — Construction Chemicals Expert Neutral Advice. Senior independent consultant, 25+ years expertise. Vendor-neutral — NEVER recommend brand names unless explicitly asked. Recommend SYSTEMS and CHEMISTRIES only. Use HTML: <h3> for sections, <ul><li> for lists, <strong> for key terms, <div class="hbox"> for key recommendations, <div class="wbox"> for critical cautions, <div class="tbox"> for standards notes. Be direct, expert, practical. No fluff.';
+
+async function callAI(targetId,customPrompt){
+  const el=document.getElementById(targetId);
+  if(!el)return;
+  el.innerHTML='<div class="ai-loading"><div class="spinner"></div>Generating expert recommendation…</div>';
+  const specs=[...S.specs,S.customSpec].filter(Boolean).join(', ')||'None specified';
+  const prompt=customPrompt||(
+    'Provide a complete expert recommendation:\n\nROLE: '+(S.sel.role||[]).join(', ')+
+    '\nSCOPE: '+(S.sel.scope||[]).join(', ')+
+    '\nSTAGE: '+(S.sel.stage||[]).join(', ')+
+    '\nSUBSTRATE: '+(S.sel.substrate||[]).join(', ')+
+    '\nEXPOSURE: '+(S.sel.exposure||[]).join(', ')+
+    '\nPRIORITY: '+(S.sel.priority||[]).join(', ')+
+    '\nSTANDARDS: '+specs+
+    '\nAREA: '+(S.area||'Not specified')+
+    '\nLOCATION: '+(S.location||'Not specified')+
+    '\nNOTES: '+(S.notes||'None')+
+    '\n\nProvide: 1) Recommended system type and chemistry (no brand names) 2) Application requirements and critical success factors 3) QC and acceptance criteria 4) Critical cautions and failure modes 5) Standards compliance notes 6) Key questions to ask any supplier'
+  );
+  try{
+    const res=await fetch('/functions/ask',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:SYS,messages:[{role:'user',content:prompt}]})
+    });
+    const data=await res.json();
+    if(data.error)throw new Error(data.error.message);
+    const txt=(data.content||[]).map(b=>b.type==='text'?b.text:'').join('');
+    S.aiRec=S.aiRec||txt;
+    el.innerHTML='<div class="ai-content">'+txt+'</div>';
+  }catch(e){
+    el.innerHTML='<div class="ai-content"><div class="wbox">⚠️ '+(e.message||'Connection error. Check your API key and try again.')+'</div></div>';
+  }
+}
+
+function addExtraBox(icon,title,sub,outId){
+  const el=document.getElementById('extra-out');
+  const box=document.createElement('div');
+  box.className='ai-box';box.style.marginBottom='16px';
+  box.innerHTML='<div class="ai-box-hdr"><div class="ai-box-ico">'+icon+'</div><div><div class="ai-box-ttl">'+title+'</div><div class="ai-box-sub">'+sub+'</div></div></div><div id="'+outId+'"><div class="ai-loading"><div class="spinner"></div>Loading…</div></div>';
+  el.appendChild(box);
+  setTimeout(()=>box.scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+
+async function askProducts(){
+  addExtraBox('🏷️','Indicative Product Reference','For reference only — equivalents from any manufacturer meeting the spec are acceptable','prod-out');
+  const p='For scope: '+(S.sel.scope||[]).join(', ')+', substrate: '+(S.sel.substrate||[]).join(', ')+', exposure: '+(S.sel.exposure||[]).join(', ')+' — list 3-5 indicative product types or reference products per system layer. Name 2-3 reputable manufacturers per category. State clearly these are INDICATIVE ONLY. Use <h3> per layer, <ul><li> items.';
+  await callAI('prod-out',p);
+  const n=document.createElement('div');
+  n.className='neutral-note';
+  n.innerHTML='These references are indicative only. CCENA does not endorse any brand. Any product meeting the specified technical requirements from a reputable manufacturer is equally acceptable.';
+  const po=document.getElementById('prod-out');
+  if(po)po.insertAdjacentElement('afterend',n);
+}
+
+async function askSpec(){
+  addExtraBox('📋','Draft Specification Clause','Adapt for your project documents — vendor-neutral performance spec','spec-out');
+  const specs=[...S.specs,S.customSpec].filter(Boolean).join(', ')||'general best practice';
+  const p='Write a draft specification clause for: scope='+(S.sel.scope||[]).join(', ')+', substrate='+(S.sel.substrate||[]).join(', ')+', exposure='+(S.sel.exposure||[]).join(', ')+', standards='+specs+'. Numbered sub-clauses. Include scope, materials by performance (no brands), execution, testing/acceptance. Professional NBS-style language.';
+  await callAI('spec-out',p);
+}
+
+async function askStandards(){
+  addExtraBox('📐','Applicable Standards Detail','Key clauses and requirements for your scope','std-out');
+  const sel=[...S.specs,S.customSpec].filter(Boolean).join(', ')||'general industry standards';
+  const p='Detail key requirements from: '+sel+' for scope='+(S.sel.scope||[]).join(', ')+', exposure='+(S.sel.exposure||[]).join(', ')+'. Per standard: (1) what it covers (2) key performance requirements (3) testing methods (4) what specifier/contractor must verify. Use <h3> per standard.';
+  await callAI('std-out',p);
+}
+
+function submitFinal(){
+  const ref='CC-'+Math.floor(100000+Math.random()*900000);
+  document.getElementById('refcode').textContent=ref;
+  document.getElementById('prog').style.width='100%';
+  document.getElementById('hdr-step').textContent='';
+  showScreen('s-done');
+  showToast('Report ready!');
+}
+
+function dlReport(){
+  const ref=document.getElementById('refcode').textContent;
+  const specs=[...S.specs,S.customSpec].filter(Boolean).join(', ')||'None specified';
+  const lines=[
+    'CCENA — CONSTRUCTION CHEMICALS EXPERT NEUTRAL ADVICE',
+    'Expert Consultation Report',
+    '='.repeat(56),
+    'Reference: '+ref,
+    'Date: '+new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}),
+    '',
+    'PROJECT DETAILS','-'.repeat(40),
+    S.cname?'Contact: '+S.cname:'',
+    S.company?'Company: '+S.company:'',
+    S.email?'Email: '+S.email:'',
+    S.projname?'Project: '+S.projname:'',
+    S.area?'Area: '+S.area:'',
+    S.location?'Location: '+S.location:'',
+    '',
+    'CONSULTATION INPUTS','-'.repeat(40),
+    'Role: '+(S.sel.role||[]).join(', '),
+    'Scope: '+(S.sel.scope||[]).join(', '),
+    'Stage: '+(S.sel.stage||[]).join(', '),
+    'Substrate: '+(S.sel.substrate||[]).join(', '),
+    'Exposure: '+(S.sel.exposure||[]).join(', '),
+    'Priority: '+(S.sel.priority||[]).join(', '),
+    'Standards: '+specs,
+    S.notes?'Notes: '+S.notes:'',
+    '',
+    'EXPERT RECOMMENDATION','-'.repeat(40),
+    S.aiRec.replace(/<[^>]+>/g,'').replace(/\n{3,}/g,'\n\n').trim()||'[See on-screen recommendation]',
+    '',
+    '='.repeat(56),
+    'DISCLAIMER: Vendor-neutral guidance only. Engage a qualified',
+    'engineer for final specification and project approval.',
+    'CCENA has no commercial affiliation with any manufacturer.',
+    '='.repeat(56)
+  ].filter(l=>l!==null&&l!==undefined);
+  const blob=new Blob([lines.join('\n')],{type:'text/plain'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='CCENA-'+ref+'.txt';
+  a.click();URL.revokeObjectURL(url);
+}
+
+function resetAll(){
+  Object.keys(S.sel).forEach(k=>delete S.sel[k]);
+  S.files=[];S.specs=[];
+  S.cname=S.company=S.email=S.projname=S.area=S.location=S.notes=S.customSpec=S.aiRec='';
+  document.querySelectorAll('.opt').forEach(c=>c.classList.remove('sel'));
+  document.querySelectorAll('.spec-tag').forEach(t=>t.classList.remove('sel-spec'));
+  document.querySelectorAll('.other-panel').forEach(p=>p.classList.remove('vis'));
+  document.querySelectorAll('input[type=text],input[type=email],textarea').forEach(i=>i.value='');
+  document.getElementById('extra-out').innerHTML='';
+  renderFiles();
+  document.getElementById('prog').style.width='0%';
+  document.getElementById('hdr-step').textContent='';
+  
+  showScreen('s0');
+}
+
+let tt;
+function showToast(msg,err){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast'+(err?' err':'');
+  t.classList.add('show');
+  clearTimeout(tt);
+  tt=setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+</body>
+</html>
